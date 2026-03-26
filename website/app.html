@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lekzio — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#050810;--bg-2:#080d1a;--surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.08);--border-glow:rgba(139,92,246,0.35);--purple:#8b5cf6;--purple-light:#a78bfa;--purple-dim:rgba(139,92,246,0.15);--cyan:#06b6d4;--cyan-dim:rgba(6,182,212,0.12);--text:#e2e8f0;--text-muted:#64748b;--text-dim:#94a3b8;--gold:#f59e0b;--green:#10b981;--pink:#ec4899;--sidebar:260px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;}
+/* Use dynamic viewport on mobile */
+@supports(height:100dvh){html,body{height:100dvh;}}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);min-width:var(--sidebar);height:100vh;background:var(--bg-2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+.sb-header{padding:1.25rem 1.25rem 0.75rem;border-bottom:1px solid var(--border);}
+.sb-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:0.75rem;}
+.sb-user{display:flex;align-items:center;gap:0.6rem;padding:0.6rem 0.75rem;background:var(--surface);border-radius:10px;}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;flex-shrink:0;}
+.sb-name{font-size:0.85rem;font-weight:600;color:var(--text);}
+.sb-level{font-size:0.72rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;}
+.sb-xp{font-size:0.72rem;color:var(--purple-light);font-family:'JetBrains Mono',monospace;}
+.sb-nav{padding:0.75rem 0.75rem;flex:1;}
+.sb-section{font-size:0.65rem;font-weight:700;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;padding:0.5rem 0.5rem 0.25rem;margin-top:0.5rem;}
+.sb-item{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 0.75rem;border-radius:8px;cursor:pointer;font-size:0.875rem;color:var(--text-dim);font-weight:500;transition:all 0.2s;border:1px solid transparent;margin-bottom:2px;user-select:none;}
+.sb-item:hover{background:var(--surface-hover);color:var(--text);}
+.sb-item.active{background:var(--purple-dim);border-color:var(--border-glow);color:var(--purple-light);}
+.sb-icon{font-size:1rem;flex-shrink:0;width:20px;text-align:center;}
+.sb-footer{padding:0.75rem;border-top:1px solid var(--border);}
+.btn-logout{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:0.6rem;border-radius:8px;cursor:pointer;font-size:0.875rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.btn-logout:hover{border-color:rgba(239,68,68,0.4);color:#f87171;background:rgba(239,68,68,0.08);}
+
+/* MAIN */
+.main{flex:1;height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column;min-width:0;}
+.topbar{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:rgba(5,8,16,0.8);backdrop-filter:blur(10px);position:sticky;top:0;z-index:10;}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;}
+.topbar-streak{display:flex;align-items:center;gap:0.4rem;font-size:0.82rem;color:var(--gold);font-family:'JetBrains Mono',monospace;}
+.content{flex:1;padding:1.5rem;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;}
+.card-title{font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;}
+.card-sub{color:var(--text-muted);font-size:0.8rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+@media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr;}.grid-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+/* BUTTONS */
+.btn{padding:0.7rem 1.4rem;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.btn-primary{background:linear-gradient(135deg,var(--purple),#6d28d9);color:#fff;box-shadow:0 0 20px rgba(139,92,246,0.3);}
+.btn-primary:hover{opacity:0.85;transform:translateY(-1px);}
+.btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text);}
+.btn-secondary:hover{border-color:var(--purple);background:var(--surface-hover);}
+.btn-sm{padding:0.45rem 0.9rem;font-size:0.82rem;}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+
+/* INPUTS */
+.input,.select,.textarea{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;padding:0.65rem 0.9rem;outline:none;transition:border-color 0.2s;width:100%;}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--purple);}
+.input::placeholder,.textarea::placeholder{color:var(--text-muted);}
+.select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.75rem center;}
+.select option{background:#0d1226;}
+.textarea{resize:vertical;min-height:120px;line-height:1.6;}
+.label{display:block;font-size:0.78rem;font-weight:600;color:var(--text-dim);margin-bottom:0.35rem;letter-spacing:0.03em;}
+.form-group{margin-bottom:1rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+
+/* SECTION HEADER */
+.sec-badge{display:inline-block;background:var(--purple-dim);border:1px solid var(--border-glow);border-radius:100px;padding:0.2rem 0.7rem;font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--purple-light);margin-bottom:0.5rem;letter-spacing:0.05em;}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:0.4rem;}
+.sec-sub{color:var(--text-dim);font-size:0.875rem;margin-bottom:1.5rem;}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 200px);min-height:400px;}
+.chat-settings{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;}
+.chat-messages{flex:1;overflow-y:auto;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:0.75rem;}
+.msg{max-width:80%;padding:0.75rem 1rem;border-radius:12px;font-size:0.9rem;line-height:1.6;}
+.msg.ai{background:var(--purple-dim);border:1px solid rgba(139,92,246,0.2);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;}
+.msg.user{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--text);align-self:flex-end;border-bottom-right-radius:4px;}
+.msg-meta{font-size:0.68rem;color:var(--text-muted);margin-top:0.3rem;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:0.5rem;}
+.typing{display:flex;align-items:center;gap:0.3rem;padding:0.75rem 1rem;background:var(--purple-dim);border:1px solid rgba(139,92,246,0.2);border-radius:12px;border-bottom-left-radius:4px;align-self:flex-start;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--purple-light);animation:tp 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes tp{0%,80%,100%{opacity:.3;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+.chat-input-row{display:flex;gap:0.5rem;align-items:center;}
+.chat-input-row .input{flex:1;}
+/* VOICE */
+.mic-btn{width:44px;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
+.mic-btn:hover{border-color:var(--purple);color:var(--text);}
+.mic-btn.listening{border-color:#ef4444;background:rgba(239,68,68,0.15);color:#f87171;animation:micPulse 1s infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4);}50%{box-shadow:0 0 0 8px rgba(239,68,68,0);}}
+.voice-bar{display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0.85rem;background:rgba(139,92,246,0.06);border:1px solid var(--border-glow);border-radius:10px;margin-bottom:0.75rem;font-size:0.82rem;color:var(--text-dim);flex-wrap:wrap;}
+.voice-toggle{display:flex;align-items:center;gap:0.5rem;cursor:pointer;user-select:none;}
+.toggle-switch{width:36px;height:20px;background:var(--surface);border:1px solid var(--border);border-radius:100px;position:relative;transition:background 0.2s;flex-shrink:0;}
+.toggle-switch.on{background:var(--purple);border-color:var(--purple);}
+.toggle-knob{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.3);}
+.toggle-switch.on .toggle-knob{left:18px;}
+.speak-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:0.15rem 0.35rem;border-radius:5px;transition:all 0.2s;line-height:1;flex-shrink:0;}
+.speak-btn:hover{color:var(--purple-light);background:var(--purple-dim);}
+.speak-btn.speaking{color:var(--purple-light);}
+
+/* GRAMMAR RESULTS */
+.score-big{font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;line-height:1;}
+.error-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1rem;margin-bottom:0.5rem;}
+.error-card.critical{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.05);}
+.error-card.moderate{border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.05);}
+.error-card.minor{border-color:rgba(6,182,212,0.3);background:rgba(6,182,212,0.05);}
+.error-wrong{font-weight:600;color:#f87171;text-decoration:line-through;font-size:0.875rem;}
+.error-correct{font-weight:600;color:var(--green);font-size:0.875rem;}
+.error-rule{font-size:0.72rem;font-family:'JetBrains Mono',monospace;color:var(--purple-light);background:var(--purple-dim);border-radius:100px;padding:0.1rem 0.5rem;display:inline-block;margin:0.3rem 0;}
+.error-explain{font-size:0.82rem;color:var(--text-dim);}
+
+/* FLASHCARD */
+.flashcard-scene{perspective:1000px;width:100%;max-width:480px;margin:0 auto;}
+.flashcard{width:100%;padding-top:60%;position:relative;transform-style:preserve-3d;transition:transform 0.6s;cursor:pointer;}
+.flashcard.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid var(--border-glow);box-shadow:0 0 40px rgba(139,92,246,0.12);}
+.card-front{background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(5,8,16,0.98));}
+.card-back{background:linear-gradient(135deg,rgba(6,182,212,0.08),rgba(5,8,16,0.98));transform:rotateY(180deg);}
+.card-word{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:var(--purple-light);margin-bottom:0.35rem;}
+.card-ipa{font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--cyan);margin-bottom:0.5rem;}
+.card-pos{font-size:0.75rem;color:var(--text-muted);background:var(--surface);border-radius:100px;padding:0.15rem 0.6rem;display:inline-block;}
+.card-def{font-size:0.95rem;color:var(--text);margin-bottom:0.75rem;}
+.card-example{font-size:0.82rem;color:var(--text-dim);font-style:italic;margin-bottom:0.35rem;}
+.card-mnemonic{font-size:0.8rem;color:var(--gold);background:rgba(245,158,11,0.08);border-radius:8px;padding:0.4rem 0.75rem;margin-top:0.5rem;}
+.srs-btns{display:flex;gap:0.5rem;margin-top:1rem;}
+.srs-btn{flex:1;padding:0.55rem;border-radius:8px;border:1px solid;text-align:center;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+
+/* PROGRESS BARS */
+.skill-row{display:grid;grid-template-columns:90px 1fr 40px;gap:0.75rem;align-items:center;margin-bottom:0.6rem;}
+.skill-label{font-size:0.78rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;}
+.skill-track{height:8px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden;}
+.skill-fill{height:100%;border-radius:100px;transition:width 1s ease;}
+.skill-val{font-size:0.72rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-align:right;}
+
+/* BADGES */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:0.75rem;}
+.badge{text-align:center;padding:0.75rem 0.5rem;border-radius:10px;border:1px solid var(--border);}
+.badge.earned{border-color:var(--border-glow);background:var(--purple-dim);}
+.badge-icon{font-size:1.8rem;margin-bottom:0.35rem;}
+.badge-name{font-size:0.65rem;color:var(--text-dim);}
+.badge.earned .badge-name{color:var(--purple-light);}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:2rem;gap:0.5rem;color:var(--text-muted);font-size:0.875rem;}
+.spin{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* TAG */
+.tag{display:inline-block;padding:0.15rem 0.55rem;border-radius:100px;font-size:0.7rem;font-family:'JetBrains Mono',monospace;}
+.tag-purple{background:var(--purple-dim);border:1px solid var(--border-glow);color:var(--purple-light);}
+.tag-green{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:var(--green);}
+.tag-gold{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--gold);}
+.tag-cyan{background:var(--cyan-dim);border:1px solid rgba(6,182,212,0.25);color:var(--cyan);}
+
+/* XP TOAST */
+.xp-toast{position:fixed;bottom:2rem;right:2rem;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);border-radius:10px;padding:0.65rem 1.1rem;font-size:0.875rem;color:var(--green);font-weight:600;font-family:'JetBrains Mono',monospace;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;}
+.xp-toast.show{opacity:1;transform:translateY(0);}
+
+/* ── HAMBURGER + OVERLAY (always defined) ───────────────────────── */
+.hamburger-btn{display:none;background:none;border:1px solid var(--border);color:var(--text);
+  padding:0;border-radius:8px;cursor:pointer;font-size:1.1rem;align-items:center;
+  justify-content:center;min-width:42px;min-height:42px;flex-shrink:0;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(3px);z-index:199;touch-action:none;}
+.content{scroll-behavior:smooth;}
+
+/* ── TABLET (≤ 900px) ───────────────────────────────────────────── */
+@media(max-width:900px){
+  .grid-4{grid-template-columns:1fr 1fr;}
+  .grid-3{grid-template-columns:1fr 1fr;}
+}
+
+/* ── MOBILE (≤ 768px) ───────────────────────────────────────────── */
+@media(max-width:768px){
+  /* Layout */
+  .sidebar{position:fixed;left:-270px;top:0;height:100%;height:100dvh;z-index:200;
+    transition:left 0.28s cubic-bezier(0.4,0,0.2,1);
+    width:260px;min-width:260px;box-shadow:8px 0 40px rgba(0,0,0,0.6);}
+  .sidebar.open{left:0;}
+  .hamburger-btn{display:flex!important;}
+  .main{width:100%;min-width:0;}
+
+  /* Topbar */
+  .topbar{padding:0.65rem 1rem;}
+  .topbar-title{font-size:1.05rem;}
+  .topbar-streak{font-size:0.75rem;gap:0.25rem;}
+
+  /* Content area */
+  .content{padding:1rem 0.85rem;}
+
+  /* Typography */
+  .sec-badge{font-size:0.65rem;}
+  .sec-title{font-size:1.2rem;}
+  .sec-sub{font-size:0.82rem;margin-bottom:1rem;}
+
+  /* Cards */
+  .card{padding:0.9rem;}
+  .card-title{font-size:0.9rem;}
+
+  /* Grids */
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr;}
+  .form-row{grid-template-columns:1fr;}
+
+  /* iOS zoom fix — inputs must be ≥16px on mobile or Safari zooms in */
+  .input,.select,.textarea{font-size:16px;}
+
+  /* Chat page */
+  .chat-wrap{height:calc(100dvh - 260px);min-height:300px;}
+  .chat-settings{flex-wrap:wrap;gap:0.4rem;}
+  .chat-settings .select{font-size:15px;flex:1 1 110px;min-width:0!important;padding:0.55rem 0.6rem;}
+  .chat-settings .btn-sm{flex-shrink:0;}
+  .chat-messages{padding:0.75rem;gap:0.6rem;font-size:0.85rem;}
+  .msg{max-width:90%;padding:0.6rem 0.85rem;font-size:0.85rem;}
+  .chat-input-row{gap:0.35rem;}
+  .chat-input-row .input{font-size:16px;padding:0.65rem 0.75rem;}
+  .chat-input-row .btn{padding:0.65rem 0.75rem;font-size:0.85rem;white-space:nowrap;}
+  .mic-btn{width:42px;height:42px;font-size:1.1rem;}
+  .voice-bar{font-size:0.75rem;gap:0.4rem;padding:0.45rem 0.65rem;}
+
+  /* Grammar */
+  .score-big{font-size:2.2rem;}
+  .error-card{padding:0.75rem;}
+
+  /* Flashcard */
+  .flashcard-scene{max-width:100%;}
+  .card-word{font-size:1.9rem;}
+  .card-ipa{font-size:0.82rem;}
+  .card-def{font-size:0.88rem;}
+  .srs-btns{gap:0.3rem;}
+  .srs-btn{padding:0.5rem 0.25rem;font-size:0.75rem;}
+
+  /* Skill bars */
+  .skill-row{grid-template-columns:75px 1fr 35px;gap:0.5rem;}
+
+  /* Badges */
+  .badge-grid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:0.5rem;}
+  .badge{padding:0.6rem 0.35rem;}
+  .badge-icon{font-size:1.5rem;}
+  .badge-name{font-size:0.6rem;}
+
+  /* XP toast */
+  .xp-toast{bottom:0.75rem;right:0.75rem;left:0.75rem;right:0.75rem;text-align:center;font-size:0.8rem;padding:0.5rem 0.85rem;}
+}
+
+/* ── SMALL PHONE (≤ 480px) ──────────────────────────────────────── */
+@media(max-width:480px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+  .topbar-streak{display:none;}  /* hide streak text, save space */
+  .card-word{font-size:1.6rem;}
+  .chat-wrap{height:calc(100dvh - 240px);}
+  .voice-bar .voice-toggle span:last-child{display:none;} /* hide "AI speaks replies" text */
+  .sec-title{font-size:1.1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo">🗣 Lekzio</div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sbAvatar">?</div>
+      <div>
+        <div class="sb-name" id="sbName">Loading...</div>
+        <div class="sb-level" id="sbLevel">—</div>
+        <div class="sb-xp" id="sbXP">0 XP</div>
+      </div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Main</div>
+    <div class="sb-item active" onclick="showPage('dashboard',this)"><span class="sb-icon">🏠</span>Dashboard</div>
+    <div class="sb-section">AI Tools</div>
+    <div class="sb-item" onclick="showPage('conversation',this)"><span class="sb-icon">💬</span>AI Conversation</div>
+    <div class="sb-item" onclick="showPage('grammar',this)"><span class="sb-icon">✏️</span>Grammar Checker</div>
+    <div class="sb-item" onclick="showPage('vocabulary',this)"><span class="sb-icon">📚</span>Vocabulary Cards</div>
+    <div class="sb-item" onclick="showPage('lessons',this)"><span class="sb-icon">🎓</span>Lesson Generator</div>
+    <div class="sb-item" onclick="showPage('translation',this)"><span class="sb-icon">🌐</span>Translation</div>
+    <div class="sb-item" onclick="showPage('writing',this)"><span class="sb-icon">✍️</span>Writing Coach</div>
+    <div class="sb-section">Practice</div>
+    <div class="sb-item" onclick="showPage('challenges',this)"><span class="sb-icon">⚡</span>Daily Challenges</div>
+    <div class="sb-item" onclick="showPage('roleplay',this)"><span class="sb-icon">🎭</span>Role Play</div>
+    <div class="sb-item" onclick="showPage('idioms',this)"><span class="sb-icon">💡</span>Idiom Explorer</div>
+    <div class="sb-section">You</div>
+    <div class="sb-item" onclick="showPage('progress',this)"><span class="sb-icon">📊</span>My Progress</div>
+  </nav>
+  <div class="sb-footer">
+    <button class="btn-logout" onclick="logout()">← Log Out</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    </div>
+    <div class="topbar-streak" id="topbarStreak">🔥 0 day streak</div>
+  </div>
+  <div class="content" id="content">
+    <!-- Pages injected here -->
+  </div>
+</div>
+
+<!-- XP Toast -->
+<div class="xp-toast" id="xpToast"></div>
+
+<script>
+// ─── AUTH ────────────────────────────────────────────────────────────────────
+let user = JSON.parse(localStorage.getItem('langai_user') || 'null');
+if (!user) { window.location.href = 'login.html'; }
+
+function saveUser() { localStorage.setItem('langai_user', JSON.stringify(user)); }
+
+function logout() {
+  localStorage.removeItem('langai_user');
+  window.location.href = 'login.html';
+}
+
+// ─── INIT USER DATA ───────────────────────────────────────────────────────────
+if (!user.xp) user.xp = 0;
+if (!user.streak) user.streak = 0;
+if (!user.lessonsCompleted) user.lessonsCompleted = 0;
+if (!user.wordsLearned) user.wordsLearned = 0;
+if (!user.skills) user.skills = {speaking:0,grammar:0,vocabulary:0,listening:0,reading:0,writing:0};
+if (!user.achievements) user.achievements = [];
+if (!user.challengesCompleted) user.challengesCompleted = {date:'',count:0};
+if (!user.flashcards) user.flashcards = [];
+if (!user.conversationHistory) user.conversationHistory = [];
+if (!user.totalChallenges) user.totalChallenges = 0;
+if (!user.translationsUsed) user.translationsUsed = 0;
+if (!user.roleplaysCompleted) user.roleplaysCompleted = 0;
+if (!user.idiomsExplored) user.idiomsExplored = 0;
+saveUser();
+
+// ─── SIDEBAR UI ──────────────────────────────────────────────────────────────
+function updateSidebar() {
+  const initials = (user.name || user.email || '?').substring(0,2).toUpperCase();
+  document.getElementById('sbAvatar').textContent = initials;
+  document.getElementById('sbName').textContent = user.name || user.email || 'Learner';
+  document.getElementById('sbLevel').textContent = (user.language || 'English') + ' · ' + (user.level || 'B1');
+  document.getElementById('sbXP').textContent = (user.xp || 0) + ' XP';
+  document.getElementById('topbarStreak').textContent = '🔥 ' + (user.streak || 0) + ' day streak';
+}
+updateSidebar();
+
+// ─── XP SYSTEM ───────────────────────────────────────────────────────────────
+function awardXP(amount, reason) {
+  user.xp = (user.xp || 0) + amount;
+  const today = new Date().toDateString();
+  if (user.lastActive !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    user.streak = (user.lastActive === yesterday) ? (user.streak || 0) + 1 : 1;
+    user.lastActive = today;
+  }
+  saveUser();
+  updateSidebar();
+  showXPToast('+' + amount + ' XP' + (reason ? ' — ' + reason : ''));
+}
+
+function showXPToast(msg) {
+  const t = document.getElementById('xpToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+const pageTitles = {
+  dashboard:'Dashboard', conversation:'AI Conversation', grammar:'Grammar Checker',
+  vocabulary:'Vocabulary Cards', lessons:'Lesson Generator', translation:'Translation',
+  writing:'Writing Coach', challenges:'Daily Challenges', roleplay:'Role Play Simulator',
+  idioms:'Idiom Explorer', progress:'My Progress'
+};
+
+function showPage(page, el) {
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('topbarTitle').textContent = pageTitles[page] || page;
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  pages[page]();
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    const ov = document.getElementById('sidebarOverlay');
+    if (ov) ov.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  const isOpen = sb.classList.toggle('open');
+  if (ov) ov.style.display = isOpen ? 'block' : 'none';
+  // Prevent body scroll when sidebar open on mobile
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+// ─── API HELPER ──────────────────────────────────────────────────────────────
+async function api(endpoint, data) {
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({error: 'Server error'}));
+    throw new Error(err.error || 'API error');
+  }
+  return res.json();
+}
+
+function loading(msg) {
+  return `<div class="loading"><div class="spin"></div>${msg || 'Thinking...'}</div>`;
+}
+
+// ─── PAGE: DASHBOARD ──────────────────────────────────────────────────────────
+const pages = {};
+
+pages.dashboard = function() {
+  const today = new Date().toDateString();
+  const challengeDone = user.challengesCompleted.date === today ? user.challengesCompleted.count : 0;
+  const xp = user.xp || 0;
+  const level = Math.floor(xp / 200) + 1;
+  const levelXP = xp % 200;
+  const levelPct = Math.round((levelXP / 200) * 100);
+  const nextLevelXP = 200 - levelXP;
+  const tips = [
+    'Try the Role Play Simulator to practice real-life situations.',
+    'Use Daily Challenges every day to maintain your streak!',
+    'The Idiom Explorer helps you sound like a native speaker.',
+    'Grammar Checker helps you catch mistakes before they become habits.',
+    'Vocabulary Cards use spaced repetition — review them often!',
+    'Try setting your correction mode to "Strict" for faster improvement.',
+  ];
+  const tip = tips[new Date().getDay() % tips.length];
+  document.getElementById('content').innerHTML = `
+  <div style="margin-bottom:1.5rem;">
+    <div class="sec-badge">WELCOME BACK</div>
+    <div class="sec-title">Hello, ${user.name || 'Learner'}! 👋</div>
+    <div class="sec-sub">Continue your ${user.language || 'English'} learning journey</div>
+    <div style="margin-top:0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.75rem 1rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+        <span style="font-size:0.78rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;">LEVEL ${level}</span>
+        <span style="font-size:0.72rem;color:var(--text-muted);">${nextLevelXP} XP to Level ${level+1}</span>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden;">
+        <div style="height:100%;width:${levelPct}%;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:100px;transition:width 1s ease;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-4" style="margin-bottom:1.5rem;">
+    <div class="card" style="text-align:center;border-color:var(--border-glow);">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--purple-light);">${user.xp||0}</div>
+      <div style="color:var(--text-muted);font-size:0.8rem;margin-top:0.25rem;">Total XP</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--gold);">${user.streak||0}</div>
+      <div style="color:var(--text-muted);font-size:0.8rem;margin-top:0.25rem;">Day Streak 🔥</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--green);">${user.lessonsCompleted||0}</div>
+      <div style="color:var(--text-muted);font-size:0.8rem;margin-top:0.25rem;">Lessons Done</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--cyan);">${user.wordsLearned||0}</div>
+      <div style="color:var(--text-muted);font-size:0.8rem;margin-top:0.25rem;">Words Learned</div>
+    </div>
+  </div>
+  <div style="margin-bottom:1rem;font-weight:600;color:var(--text-dim);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.08em;">Quick Actions</div>
+  <div class="grid-3">
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onclick="showPage('conversation',document.querySelectorAll('.sb-item')[2])" onmouseover="this.style.borderColor='var(--border-glow)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">💬</div>
+      <div class="card-title">AI Conversation</div>
+      <div class="card-sub">Chat with an AI native speaker</div>
+      <div style="margin-top:0.75rem;"><span class="tag tag-purple">+10 XP / message</span></div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onclick="showPage('grammar',document.querySelectorAll('.sb-item')[3])" onmouseover="this.style.borderColor='var(--border-glow)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">✏️</div>
+      <div class="card-title">Grammar Checker</div>
+      <div class="card-sub">Paste text for instant analysis</div>
+      <div style="margin-top:0.75rem;"><span class="tag tag-green">+15 XP / check</span></div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onclick="showPage('challenges',document.querySelectorAll('.sb-item')[8])" onmouseover="this.style.borderColor='var(--border-glow)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">⚡</div>
+      <div class="card-title">Daily Challenges</div>
+      <div class="card-sub">${challengeDone}/5 completed today</div>
+      <div style="margin-top:0.75rem;"><span class="tag tag-gold">+100 XP bonus</span></div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onclick="showPage('vocabulary',document.querySelectorAll('.sb-item')[4])" onmouseover="this.style.borderColor='var(--border-glow)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">📚</div>
+      <div class="card-title">Vocabulary Cards</div>
+      <div class="card-sub">${(user.flashcards||[]).length} cards in your deck</div>
+      <div style="margin-top:0.75rem;"><span class="tag tag-cyan">SM-2 SRS</span></div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onclick="showPage('lessons',document.querySelectorAll('.sb-item')[5])" onmouseover="this.style.borderColor='var(--border-glow)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">🎓</div>
+      <div class="card-title">Lesson Generator</div>
+      <div class="card-sub">Custom AI lessons on any topic</div>
+      <div style="margin-top:0.75rem;"><span class="tag tag-purple">+50 XP / lesson</span></div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onclick="showPage('writing',document.querySelectorAll('.sb-item')[7])" onmouseover="this.style.borderColor='var(--border-glow)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">✍️</div>
+      <div class="card-title">Writing Coach</div>
+      <div class="card-sub">Get your writing analyzed + rewritten</div>
+      <div style="margin-top:0.75rem;"><span class="tag tag-green">+20 XP / analysis</span></div>
+    </div>
+  </div>
+  <div style="margin-top:1.25rem;background:rgba(6,182,212,0.05);border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:0.75rem;">
+    <span style="font-size:1.2rem;flex-shrink:0;">💡</span>
+    <div>
+      <div style="font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:var(--cyan);margin-bottom:0.2rem;">TIP OF THE DAY</div>
+      <div style="font-size:0.875rem;color:var(--text-dim);">${tip}</div>
+    </div>
+  </div>`;
+};
+
+// ─── PAGE: CONVERSATION ────────────────────────────────────────────────────────
+let chatMessages = [];
+
+pages.conversation = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">AI FEATURE</div>
+  <div class="sec-title">AI Conversation Partner</div>
+  <div class="sec-sub">Chat or speak with a native speaker AI. Earn +10 XP per message.</div>
+  <div class="chat-wrap">
+    <div class="chat-settings">
+      <select class="select" id="chatLang" style="width:auto;flex:1;min-width:130px;">
+        <option value="English" ${(user.language||'English')==='English'?'selected':''}>🇬🇧 English</option>
+        <option value="Spanish" ${user.language==='Spanish'?'selected':''}>🇪🇸 Spanish</option>
+        <option value="French" ${user.language==='French'?'selected':''}>🇫🇷 French</option>
+        <option value="German" ${user.language==='German'?'selected':''}>🇩🇪 German</option>
+        <option value="Italian" ${user.language==='Italian'?'selected':''}>🇮🇹 Italian</option>
+        <option value="Japanese" ${user.language==='Japanese'?'selected':''}>🇯🇵 Japanese</option>
+        <option value="Mandarin" ${user.language==='Mandarin'?'selected':''}>🇨🇳 Mandarin</option>
+        <option value="Portuguese" ${user.language==='Portuguese'?'selected':''}>🇧🇷 Portuguese</option>
+        <option value="Arabic" ${user.language==='Arabic'?'selected':''}>🇸🇦 Arabic</option>
+        <option value="Hindi" ${user.language==='Hindi'?'selected':''}>🇮🇳 Hindi</option>
+      </select>
+      <select class="select" id="chatLevel" style="width:auto;flex:1;min-width:100px;">
+        ${['A1','A2','B1','B2','C1','C2'].map(l=>`<option ${(user.level||'B1')===l?'selected':''}>${l}</option>`).join('')}
+      </select>
+      <select class="select" id="chatMode" style="width:auto;flex:1;min-width:130px;">
+        <option value="Gentle">Gentle Correction</option>
+        <option value="Strict">Strict Correction</option>
+        <option value="Silent">Silent (No Corrections)</option>
+      </select>
+      <button class="btn btn-secondary btn-sm" onclick="clearChat()">Clear</button>
+    </div>
+    <div class="voice-bar">
+      <span>🎙️ <strong>Voice Mode</strong></span>
+      <label class="voice-toggle" onclick="toggleVoiceResponse()">
+        <div class="toggle-switch" id="voiceToggle"><div class="toggle-knob"></div></div>
+        <span id="voiceToggleLabel">AI speaks replies</span>
+      </label>
+      <span style="color:var(--border);font-size:0.7rem;">|</span>
+      <span style="font-size:0.78rem;">🎤 Click mic to speak</span>
+      <span style="margin-left:auto;font-size:0.75rem;color:var(--text-muted);" id="voiceStatus"></span>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg ai">
+        <div>Hello! I'm your AI language tutor. Let's have a conversation in ${user.language||'English'}. Tell me — how has your day been so far? 😊</div>
+        <div class="msg-meta"><span>${new Date().toLocaleTimeString()}</span><button class="speak-btn" onclick="speakText(this,'Hello! I\\'m your AI language tutor. Let\\'s have a conversation. Tell me — how has your day been so far?')" title="Listen">🔊</button></div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Hold to speak">🎤</button>
+      <input class="input" id="chatInput" placeholder="Type or click 🎤 to speak..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"/>
+      <button class="btn btn-primary" id="chatSendBtn" onclick="sendChat()">Send →</button>
+    </div>
+  </div>`;
+  chatMessages = [{role:'assistant', content:`Hello! I'm your AI language tutor. Let's have a conversation in ${user.language||'English'}. Tell me — how has your day been so far? 😊`}];
+};
+
+function clearChat() {
+  chatMessages = [];
+  pages.conversation();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const btn = document.getElementById('chatSendBtn');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const lang = document.getElementById('chatLang').value;
+  const level = document.getElementById('chatLevel').value;
+  const mode = document.getElementById('chatMode').value;
+
+  // Add user message
+  chatMessages.push({role:'user', content: msg});
+  appendMessage('user', msg);
+  input.value = '';
+  btn.disabled = true;
+
+  // Show typing
+  const typingEl = document.createElement('div');
+  typingEl.className = 'typing';
+  typingEl.innerHTML = '<span></span><span></span><span></span>';
+  typingEl.id = 'typing';
+  document.getElementById('chatMessages').appendChild(typingEl);
+  scrollChat();
+
+  try {
+    const data = await api('/api/chat', {messages: chatMessages, language: lang, level, correctionMode: mode});
+    document.getElementById('typing')?.remove();
+    chatMessages.push({role:'assistant', content: data.reply});
+    appendMessage('ai', data.reply);
+    awardXP(10, 'conversation');
+    user.skills.speaking = Math.min(100, (user.skills.speaking||0) + 1);
+    saveUser();
+  } catch(e) {
+    document.getElementById('typing')?.remove();
+    appendMessage('ai', '⚠️ Error: ' + e.message + '. Make sure the server is running and your API key is set.');
+  }
+  btn.disabled = false;
+  scrollChat();
+}
+
+function appendMessage(role, text) {
+  const c = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  const time = document.createElement('span');
+  time.textContent = new Date().toLocaleTimeString();
+  meta.appendChild(time);
+  if (role === 'ai') {
+    const speakBtn = document.createElement('button');
+    speakBtn.className = 'speak-btn';
+    speakBtn.title = 'Listen';
+    speakBtn.textContent = '🔊';
+    speakBtn.addEventListener('click', () => speakText(speakBtn, text));
+    meta.appendChild(speakBtn);
+  }
+  const body = document.createElement('div');
+  body.innerHTML = text.replace(/\n/g,'<br>');
+  div.appendChild(body);
+  div.appendChild(meta);
+  c.appendChild(div);
+  scrollChat();
+  if (role === 'ai' && voiceResponseOn) speakText(null, text);
+}
+
+function scrollChat() {
+  const c = document.getElementById('chatMessages');
+  if (c) c.scrollTop = c.scrollHeight;
+}
+
+// ─── VOICE FEATURES ───────────────────────────────────────────────────────────
+let voiceResponseOn = false;
+let recognition = null;
+let isListening = false;
+let currentUtterance = null;
+
+// Text-to-Speech
+function speakText(btn, text) {
+  if (!window.speechSynthesis) return;
+  // Stop any current speech
+  window.speechSynthesis.cancel();
+  if (btn && btn.classList.contains('speaking')) {
+    btn.classList.remove('speaking');
+    btn.textContent = '🔊';
+    return;
+  }
+  // Mark all speak btns as not speaking
+  document.querySelectorAll('.speak-btn').forEach(b => { b.classList.remove('speaking'); b.textContent = '🔊'; });
+  const lang = document.getElementById('chatLang') ? document.getElementById('chatLang').value : (user.language || 'English');
+  const langCodes = {
+    English:'en-US', Spanish:'es-ES', French:'fr-FR', German:'de-DE',
+    Italian:'it-IT', Japanese:'ja-JP', Mandarin:'zh-CN', Portuguese:'pt-BR',
+    Arabic:'ar-SA', Hindi:'hi-IN', Korean:'ko-KR', Russian:'ru-RU',
+    Dutch:'nl-NL', Turkish:'tr-TR', Polish:'pl-PL'
+  };
+  // Strip markdown-like corrections for cleaner speech
+  const cleanText = text.replace(/📝.*$/s,'').replace(/\[✓[^\]]*\]/g,'').replace(/<[^>]+>/g,'').trim();
+  const utter = new SpeechSynthesisUtterance(cleanText);
+  utter.lang = langCodes[lang] || 'en-US';
+  utter.rate = 0.92;
+  utter.pitch = 1;
+  if (btn) {
+    btn.classList.add('speaking');
+    btn.textContent = '⏹';
+  }
+  utter.onend = () => {
+    if (btn) { btn.classList.remove('speaking'); btn.textContent = '🔊'; }
+    currentUtterance = null;
+  };
+  currentUtterance = utter;
+  window.speechSynthesis.speak(utter);
+}
+
+function toggleVoiceResponse() {
+  voiceResponseOn = !voiceResponseOn;
+  const sw = document.getElementById('voiceToggle');
+  const label = document.getElementById('voiceToggleLabel');
+  if (sw) sw.classList.toggle('on', voiceResponseOn);
+  if (label) label.textContent = voiceResponseOn ? 'AI speaks replies ✓' : 'AI speaks replies';
+}
+
+// Speech-to-Text (Mic)
+function toggleMic() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    const status = document.getElementById('voiceStatus');
+    if (status) status.textContent = '⚠️ Voice not supported in this browser. Use Chrome.';
+    return;
+  }
+  if (isListening) {
+    stopMic();
+  } else {
+    startMic();
+  }
+}
+
+function startMic() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRec();
+  const lang = document.getElementById('chatLang') ? document.getElementById('chatLang').value : 'English';
+  const langCodes = {
+    English:'en-US', Spanish:'es-ES', French:'fr-FR', German:'de-DE',
+    Italian:'it-IT', Japanese:'ja-JP', Mandarin:'zh-CN', Portuguese:'pt-BR',
+    Arabic:'ar-SA', Hindi:'hi-IN', Korean:'ko-KR', Russian:'ru-RU',
+    Dutch:'nl-NL', Turkish:'tr-TR', Polish:'pl-PL'
+  };
+  recognition.lang = langCodes[lang] || 'en-US';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+
+  const micBtn = document.getElementById('micBtn');
+  const input = document.getElementById('chatInput');
+  const status = document.getElementById('voiceStatus');
+  isListening = true;
+  if (micBtn) micBtn.classList.add('listening');
+  if (status) status.textContent = '🎙️ Listening...';
+
+  recognition.onresult = (e) => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    if (input) input.value = transcript;
+    if (e.results[e.results.length - 1].isFinal) {
+      stopMic();
+      setTimeout(() => sendChat(), 300);
+    }
+  };
+
+  recognition.onerror = (e) => {
+    if (status) status.textContent = e.error === 'not-allowed' ? '⚠️ Mic permission denied' : '⚠️ ' + e.error;
+    cleanupMic();
+  };
+
+  // onend fires when recognition stops (naturally or via stop()) — just clean up UI, never call stop() here
+  recognition.onend = () => { cleanupMic(); };
+
+  recognition.start();
+}
+
+function cleanupMic() {
+  isListening = false;
+  recognition = null;
+  const micBtn = document.getElementById('micBtn');
+  const status = document.getElementById('voiceStatus');
+  if (micBtn) micBtn.classList.remove('listening');
+  if (status) status.textContent = '';
+}
+
+function stopMic() {
+  if (recognition) {
+    // onend will call cleanupMic() automatically after stop()
+    try { recognition.stop(); } catch(e) { cleanupMic(); }
+  } else {
+    cleanupMic();
+  }
+}
+
+// ─── PAGE: GRAMMAR ────────────────────────────────────────────────────────────
+pages.grammar = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">AI FEATURE</div>
+  <div class="sec-title">Grammar Checker</div>
+  <div class="sec-sub">Paste any text and get instant AI grammar analysis with explanations. +15 XP per check.</div>
+  <div class="grid-2" style="align-items:start;">
+    <div>
+      <div class="form-group">
+        <label class="label">Your Text</label>
+        <textarea class="textarea" id="grammarInput" style="min-height:200px;" placeholder="Paste or type your English text here...
+Example: Yesterday I goed to the store and buyed some food. It was very good day."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="checkGrammar()" id="grammarBtn">Check Grammar →</button>
+    </div>
+    <div id="grammarResult">
+      <div class="card" style="background:rgba(139,92,246,0.05);border-color:var(--border-glow);text-align:center;padding:2rem;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">✏️</div>
+        <div style="font-weight:600;margin-bottom:0.25rem;">Ready to Check</div>
+        <div style="color:var(--text-muted);font-size:0.85rem;">Type or paste text on the left, then click Check Grammar</div>
+      </div>
+    </div>
+  </div>`;
+};
+
+async function checkGrammar() {
+  const text = document.getElementById('grammarInput').value.trim();
+  if (!text) return;
+  const btn = document.getElementById('grammarBtn');
+  btn.disabled = true; btn.textContent = 'Analyzing...';
+  document.getElementById('grammarResult').innerHTML = loading('Analyzing your grammar...');
+  try {
+    const data = await api('/api/analyze', {text, type:'grammar'});
+    const r = data.result;
+    const score = r.score || 0;
+    const color = score >= 80 ? 'var(--green)' : score >= 60 ? 'var(--gold)' : '#f87171';
+    const errors = r.errors || [];
+    document.getElementById('grammarResult').innerHTML = `
+    <div class="card" style="margin-bottom:0.75rem;text-align:center;border-color:${color};">
+      <div class="score-big" style="color:${color};">${score}</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem;">Grammar Score / 100</div>
+      <div style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-dim);">${r.overall||''}</div>
+      ${r.level ? `<div style="margin-top:0.5rem;"><span class="tag tag-purple">${r.level} Level</span></div>` : ''}
+    </div>
+    ${errors.length===0 ? '<div class="card" style="text-align:center;border-color:rgba(16,185,129,0.4);color:var(--green);padding:1.5rem;">✅ No errors found! Excellent grammar.</div>' :
+      '<div style="font-weight:600;font-size:0.85rem;margin-bottom:0.5rem;color:var(--text-dim);">'+errors.length+' Error'+(errors.length!==1?'s':'')+' Found:</div>' +
+      errors.map(e => `<div class="error-card ${e.severity||'minor'}">
+        <div style="margin-bottom:0.3rem;">
+          <span class="error-wrong">"${e.original}"</span> → <span class="error-correct">"${e.correction}"</span>
+        </div>
+        <span class="error-rule">${e.rule||'Grammar Rule'}</span>
+        <div class="error-explain">${e.explanation||''}</div>
+      </div>`).join('')
+    }
+    ${(r.strengths||[]).length>0 ? `<div style="margin-top:0.75rem;font-weight:600;font-size:0.85rem;color:var(--green);margin-bottom:0.5rem;">✅ Strengths:</div>${r.strengths.map(s=>`<div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.25rem;">• ${s}</div>`).join('')}` : ''}`;
+    awardXP(15, 'grammar check');
+    user.skills.grammar = Math.min(100, (user.skills.grammar||0) + 2);
+    saveUser();
+  } catch(e) {
+    document.getElementById('grammarResult').innerHTML = `<div class="card" style="border-color:rgba(239,68,68,0.4);color:#f87171;">⚠️ Error: ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.textContent = 'Check Grammar →';
+}
+
+// ─── PAGE: VOCABULARY ─────────────────────────────────────────────────────────
+let currentCard = null;
+
+pages.vocabulary = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">AI FEATURE</div>
+  <div class="sec-title">Vocabulary Flashcards</div>
+  <div class="sec-sub">Build your vocabulary with AI-generated cards and spaced repetition. +5 XP per card.</div>
+  <div style="display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:flex-end;">
+    <div style="flex:1;min-width:180px;">
+      <label class="label">Enter a Word</label>
+      <input class="input" id="vocabInput" placeholder="e.g. perseverance" onkeydown="if(event.key==='Enter')generateCard()"/>
+    </div>
+    <button class="btn btn-secondary" onclick="generateRandomCard()">🎲 Random Word</button>
+    <button class="btn btn-primary" id="vocabBtn" onclick="generateCard()">Generate Card →</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;margin-bottom:1rem;align-items:center;">
+    <span style="font-size:0.82rem;color:var(--text-muted);">Deck:</span>
+    <span class="tag tag-purple">${(user.flashcards||[]).length} cards</span>
+    ${(user.flashcards||[]).length>0?`<button class="btn btn-secondary btn-sm" onclick="browseCards()">Browse Deck</button>`:''}
+  </div>
+  <div id="vocabCard">
+    <div class="card" style="text-align:center;padding:2.5rem;border-color:var(--border-glow);">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">📚</div>
+      <div style="font-weight:600;margin-bottom:0.25rem;">Enter a word above</div>
+      <div style="color:var(--text-muted);font-size:0.85rem;">Or click "Random Word" to get started</div>
+    </div>
+  </div>`;
+};
+
+async function generateRandomCard() {
+  const btn = document.getElementById('vocabBtn');
+  btn.disabled = true;
+  document.getElementById('vocabCard').innerHTML = loading('Picking a word...');
+  try {
+    const data = await api('/api/generate', {type:'random_word'});
+    document.getElementById('vocabInput').value = data.result.word;
+    await generateCard();
+  } catch(e) {
+    document.getElementById('vocabCard').innerHTML = `<div class="card" style="color:#f87171;">⚠️ ${e.message}</div>`;
+  }
+  btn.disabled = false;
+}
+
+async function generateCard() {
+  const word = document.getElementById('vocabInput').value.trim();
+  if (!word) return;
+  const btn = document.getElementById('vocabBtn');
+  btn.disabled = true; btn.textContent = 'Generating...';
+  document.getElementById('vocabCard').innerHTML = loading('Creating flashcard...');
+  try {
+    const data = await api('/api/generate', {type:'vocabulary', word, language: user.language||'English'});
+    currentCard = data.result;
+    renderCard(currentCard, false);
+    awardXP(5, 'vocabulary card');
+    user.wordsLearned = (user.wordsLearned||0) + 1;
+    user.skills.vocabulary = Math.min(100, (user.skills.vocabulary||0) + 2);
+    saveUser();
+  } catch(e) {
+    document.getElementById('vocabCard').innerHTML = `<div class="card" style="color:#f87171;">⚠️ ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.textContent = 'Generate Card →';
+}
+
+function renderCard(card, flipped) {
+  document.getElementById('vocabCard').innerHTML = `
+  <div class="flashcard-scene">
+    <div class="flashcard ${flipped?'flipped':''}" id="fc" onclick="flipCard()">
+      <div class="card-face card-front">
+        <div class="card-word">${card.word}</div>
+        <div class="card-ipa">${card.ipa||''}</div>
+        <div class="card-pos">${card.part_of_speech||''}</div>
+        <div style="margin-top:1rem;color:var(--text-muted);font-size:0.82rem;">Click to reveal definition</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-def">${card.definition||''}</div>
+        ${(card.examples||[]).slice(0,2).map(e=>`<div class="card-example">"${e}"</div>`).join('')}
+        ${card.mnemonics&&card.mnemonics[0]?`<div class="card-mnemonic">💡 ${card.mnemonics[0]}</div>`:''}
+      </div>
+    </div>
+  </div>
+  <div class="srs-btns" id="srsBtns" style="${flipped?'':'opacity:0.3;pointer-events:none;'}">
+    <div class="srs-btn" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#f87171;" onclick="rateCard('again')">Again</div>
+    <div class="srs-btn" style="background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.4);color:#fbbf24;" onclick="rateCard('hard')">Hard</div>
+    <div class="srs-btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#34d399;" onclick="rateCard('good')">Good</div>
+    <div class="srs-btn" style="background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.4);color:#a78bfa;" onclick="rateCard('easy')">Easy</div>
+  </div>`;
+}
+
+function flipCard() {
+  const fc = document.getElementById('fc');
+  const flipped = fc.classList.toggle('flipped');
+  const btns = document.getElementById('srsBtns');
+  if (btns) { btns.style.opacity = flipped?'1':'0.3'; btns.style.pointerEvents = flipped?'auto':'none'; }
+}
+
+function rateCard(rating) {
+  if (!currentCard) return;
+  const existing = (user.flashcards||[]).findIndex(c=>c.word===currentCard.word);
+  const card = {...currentCard, rating, reviewed: new Date().toISOString()};
+  if (existing >= 0) user.flashcards[existing] = card;
+  else { if (!user.flashcards) user.flashcards = []; user.flashcards.push(card); }
+  saveUser();
+  showXPToast('Card saved to deck!');
+  setTimeout(() => pages.vocabulary(), 500);
+}
+
+function browseCards() {
+  const cards = user.flashcards || [];
+  document.getElementById('vocabCard').innerHTML = `
+  <div style="margin-top:0.5rem;">
+    <div style="font-weight:600;margin-bottom:0.75rem;">Your Deck (${cards.length} cards)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+      ${cards.map(c=>`<div class="card" style="cursor:pointer;padding:0.65rem 0.85rem;" onclick="document.getElementById('vocabInput').value='${c.word}';generateCard()">
+        <div style="font-weight:600;font-size:0.9rem;">${c.word}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">${c.rating||'new'}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ─── PAGE: LESSONS ────────────────────────────────────────────────────────────
+pages.lessons = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">AI FEATURE</div>
+  <div class="sec-title">Lesson Generator</div>
+  <div class="sec-sub">Get a complete custom lesson on any topic at your level. +50 XP on completion.</div>
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="form-row" style="margin-bottom:0.75rem;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="label">Topic</label>
+        <input class="input" id="lessonTopic" placeholder="e.g. Ordering food at a restaurant"/>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="label">Your Level</label>
+        <select class="select" id="lessonLevel">
+          ${['A1','A2','B1','B2','C1','C2'].map(l=>`<option ${(user.level||'B1')===l?'selected':''}>${l}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom:0.75rem;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="label">Focus</label>
+        <select class="select" id="lessonFocus">
+          <option>Vocabulary &amp; Grammar</option>
+          <option>Conversation &amp; Speaking</option>
+          <option>Reading &amp; Comprehension</option>
+          <option>Writing &amp; Structure</option>
+          <option>All Skills</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="lessonBtn" onclick="generateLesson()">Generate Lesson →</button>
+  </div>
+  <div id="lessonResult"></div>`;
+};
+
+async function generateLesson() {
+  const topic = document.getElementById('lessonTopic').value.trim() || 'Daily Conversation';
+  const level = document.getElementById('lessonLevel').value;
+  const focus = document.getElementById('lessonFocus').value;
+  const btn = document.getElementById('lessonBtn');
+  btn.disabled = true; btn.textContent = 'Generating...';
+  document.getElementById('lessonResult').innerHTML = loading('Creating your personalized lesson...');
+  try {
+    const data = await api('/api/generate', {type:'lesson', topic, level, focus, language: user.language||'English'});
+    const r = data.result;
+    document.getElementById('lessonResult').innerHTML = `
+    <div class="card" style="margin-bottom:1rem;border-color:var(--border-glow);">
+      <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;">${r.title||topic}</div>
+          <div style="margin-top:0.35rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <span class="tag tag-purple">${r.level||level}</span>
+            <span class="tag tag-cyan">${user.language||'English'}</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="completeLesson()">✓ Mark Complete (+50 XP)</button>
+      </div>
+      ${(r.vocabulary||[]).length>0?`
+      <div style="margin-bottom:1.25rem;">
+        <div style="font-weight:600;margin-bottom:0.5rem;color:var(--text-dim);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;">Vocabulary (${r.vocabulary.length} words)</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+          ${r.vocabulary.map(v=>`<div class="card" style="padding:0.6rem 0.85rem;flex:none;">
+            <div style="font-weight:600;font-size:0.9rem;">${v.word}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);">${v.definition}</div>
+            <div style="font-size:0.72rem;color:var(--text-dim);font-style:italic;margin-top:0.2rem;">"${v.example}"</div>
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+      ${(r.grammar_rules||[]).length>0?`
+      <div style="margin-bottom:1.25rem;">
+        <div style="font-weight:600;margin-bottom:0.5rem;color:var(--text-dim);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;">Grammar Rules</div>
+        ${r.grammar_rules.map(g=>`<div class="error-card minor" style="margin-bottom:0.5rem;">
+          <div style="font-weight:600;color:var(--cyan);margin-bottom:0.2rem;">${g.rule}</div>
+          <div style="font-size:0.85rem;color:var(--text-dim);">${g.explanation}</div>
+          <div style="font-size:0.82rem;color:var(--purple-light);margin-top:0.25rem;font-style:italic;">"${g.example}"</div>
+        </div>`).join('')}
+      </div>` : ''}
+      ${r.reading_passage?`
+      <div style="margin-bottom:1.25rem;">
+        <div style="font-weight:600;margin-bottom:0.5rem;color:var(--text-dim);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;">Reading Passage</div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:1rem;font-size:0.9rem;line-height:1.7;color:var(--text-dim);">${r.reading_passage}</div>
+      </div>` : ''}
+      ${(r.comprehension_questions||[]).length>0?`
+      <div style="margin-bottom:1.25rem;">
+        <div style="font-weight:600;margin-bottom:0.5rem;color:var(--text-dim);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;">Comprehension Questions</div>
+        ${r.comprehension_questions.map((q,i)=>`<div style="margin-bottom:0.6rem;">
+          <div style="font-size:0.875rem;font-weight:500;margin-bottom:0.25rem;">${i+1}. ${q.question}</div>
+          <div style="font-size:0.82rem;color:var(--text-muted);padding-left:1rem;">→ ${q.answer}</div>
+        </div>`).join('')}
+      </div>` : ''}
+      ${(r.exercises||[]).length>0?`
+      <div>
+        <div style="font-weight:600;margin-bottom:0.5rem;color:var(--text-dim);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.08em;">Fill in the Blank Exercises</div>
+        ${r.exercises.map((ex,i)=>`<div style="margin-bottom:0.75rem;">
+          <div style="font-size:0.875rem;margin-bottom:0.2rem;"><strong>${i+1}.</strong> ${ex.sentence}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem;">Hint: ${ex.hint}</div>
+          <details style="font-size:0.82rem;color:var(--green);cursor:pointer;">
+            <summary style="cursor:pointer;user-select:none;">Show Answer</summary>
+            <span>${ex.answer}</span>
+          </details>
+        </div>`).join('')}
+      </div>` : ''}
+    </div>`;
+  } catch(e) {
+    document.getElementById('lessonResult').innerHTML = `<div class="card" style="color:#f87171;">⚠️ ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.textContent = 'Generate Lesson →';
+}
+
+function completeLesson() {
+  awardXP(50, 'lesson completed');
+  user.lessonsCompleted = (user.lessonsCompleted||0) + 1;
+  user.skills.reading = Math.min(100, (user.skills.reading||0) + 3);
+  saveUser();
+  showXPToast('🎉 Lesson complete! +50 XP');
+}
+
+// ─── PAGE: TRANSLATION ────────────────────────────────────────────────────────
+pages.translation = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">AI FEATURE</div>
+  <div class="sec-title">Smart Translation</div>
+  <div class="sec-sub">Go beyond word-for-word — get cultural context, formality analysis, and alternatives. +5 XP.</div>
+  <div class="grid-2" style="align-items:start;">
+    <div>
+      <div class="form-group">
+        <label class="label">Your Text</label>
+        <textarea class="textarea" id="transInput" style="min-height:150px;" placeholder="Type any text to translate..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="label">Translate To</label>
+        <select class="select" id="transTarget">
+          <option>English</option><option>Spanish</option><option>French</option>
+          <option>German</option><option>Italian</option><option>Japanese</option>
+          <option>Mandarin</option><option>Portuguese</option><option>Arabic</option><option>Hindi</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="transBtn" onclick="doTranslation()">Translate →</button>
+    </div>
+    <div id="transResult">
+      <div class="card" style="text-align:center;padding:2.5rem;border-color:var(--border-glow);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">🌐</div>
+        <div style="color:var(--text-muted);font-size:0.85rem;">Translation will appear here</div>
+      </div>
+    </div>
+  </div>`;
+};
+
+async function doTranslation() {
+  const text = document.getElementById('transInput').value.trim();
+  const targetLang = document.getElementById('transTarget').value;
+  if (!text) return;
+  const btn = document.getElementById('transBtn');
+  btn.disabled = true; btn.textContent = 'Translating...';
+  document.getElementById('transResult').innerHTML = loading('Translating...');
+  try {
+    const data = await api('/api/analyze', {text, type:'translation', targetLang});
+    const r = data.result;
+    document.getElementById('transResult').innerHTML = `
+    <div class="card" style="border-color:var(--border-glow);">
+      <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--purple-light);margin-bottom:0.5rem;">TRANSLATION → ${targetLang.toUpperCase()}</div>
+      <div style="font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:0.75rem;line-height:1.6;">${r.translation||''}</div>
+      ${r.formality?`<div style="margin-bottom:0.75rem;"><span class="tag tag-gold">Formality: ${r.formality}</span></div>`:''}
+      ${r.literal?`<div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.75rem;padding:0.65rem;background:var(--surface);border-radius:8px;"><strong>Literal:</strong> ${r.literal}</div>`:''}
+      ${r.cultural_notes?`<div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.75rem;padding:0.75rem;background:rgba(6,182,212,0.05);border:1px solid rgba(6,182,212,0.2);border-radius:10px;">🌏 <strong>Cultural notes:</strong> ${r.cultural_notes}</div>`:''}
+      ${(r.alternatives||[]).length>0?`<div style="margin-top:0.5rem;"><div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.35rem;">ALTERNATIVES</div>${r.alternatives.map(a=>`<div style="font-size:0.875rem;color:var(--text-dim);padding:0.3rem 0;border-bottom:1px solid var(--border);">${a}</div>`).join('')}</div>`:''}
+    </div>`;
+    awardXP(5, 'translation');
+    user.skills.reading = Math.min(100,(user.skills.reading||0)+1);
+    user.translationsUsed = (user.translationsUsed||0) + 1;
+    saveUser();
+  } catch(e) {
+    document.getElementById('transResult').innerHTML = `<div class="card" style="color:#f87171;">⚠️ ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.textContent = 'Translate →';
+}
+
+// ─── PAGE: WRITING COACH ──────────────────────────────────────────────────────
+pages.writing = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">AI FEATURE</div>
+  <div class="sec-title">Writing Coach</div>
+  <div class="sec-sub">Get your writing scored on register, coherence, vocabulary, style — plus a professional AI rewrite. +20 XP.</div>
+  <div class="form-group">
+    <label class="label">Writing Type</label>
+    <select class="select" id="writeType" style="width:auto;min-width:180px;">
+      <option>Essay</option><option>Email</option><option>Short Story</option><option>Social Media Post</option><option>Business Report</option>
+    </select>
+  </div>
+  <div class="grid-2" style="align-items:start;">
+    <div>
+      <div class="form-group">
+        <label class="label">Your Writing</label>
+        <textarea class="textarea" id="writeInput" style="min-height:220px;" placeholder="Paste or write your text here..."></textarea>
+      </div>
+      <button class="btn btn-primary" id="writeBtn" onclick="analyzeWriting()">Analyze Writing →</button>
+    </div>
+    <div id="writeResult">
+      <div class="card" style="text-align:center;padding:2.5rem;border-color:var(--border-glow);">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">✍️</div>
+        <div style="color:var(--text-muted);font-size:0.85rem;">Analysis will appear here</div>
+      </div>
+    </div>
+  </div>`;
+};
+
+async function analyzeWriting() {
+  const text = document.getElementById('writeInput').value.trim();
+  const writingType = document.getElementById('writeType').value;
+  if (!text) return;
+  const btn = document.getElementById('writeBtn');
+  btn.disabled = true; btn.textContent = 'Analyzing...';
+  document.getElementById('writeResult').innerHTML = loading('Analyzing your writing...');
+  try {
+    const data = await api('/api/analyze', {text, type:'writing', writingType});
+    const r = data.result;
+    const scores = r.scores || {};
+    const overall = scores.overall || 0;
+    const color = overall >= 80 ? 'var(--green)' : overall >= 60 ? 'var(--gold)' : '#f87171';
+    const scoreItems = Object.entries(scores).filter(([k])=>k!=='overall');
+    document.getElementById('writeResult').innerHTML = `
+    <div class="card" style="border-color:${color};margin-bottom:0.75rem;text-align:center;">
+      <div class="score-big" style="color:${color};">${overall}</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem;">Overall Writing Score / 100</div>
+    </div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      ${scoreItems.map(([k,v])=>`<div class="skill-row"><div class="skill-label">${k}</div><div class="skill-track"><div class="skill-fill" style="width:${v}%;background:linear-gradient(90deg,var(--purple),var(--purple-light));"></div></div><div class="skill-val">${v}</div></div>`).join('')}
+    </div>
+    ${(r.strengths||[]).length>0?`<div class="card" style="margin-bottom:0.75rem;border-color:rgba(16,185,129,0.3);">
+      <div style="font-weight:600;color:var(--green);margin-bottom:0.4rem;font-size:0.85rem;">✅ Strengths</div>
+      ${r.strengths.map(s=>`<div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.2rem;">• ${s}</div>`).join('')}
+    </div>`:''}
+    ${(r.improvements||[]).length>0?`<div class="card" style="margin-bottom:0.75rem;border-color:rgba(245,158,11,0.3);">
+      <div style="font-weight:600;color:var(--gold);margin-bottom:0.4rem;font-size:0.85rem;">💡 Improvements</div>
+      ${r.improvements.map(i=>`<div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.2rem;">• ${i}</div>`).join('')}
+    </div>`:''}
+    ${r.rewrite?`<div class="card" style="border-color:rgba(139,92,246,0.4);">
+      <div style="font-weight:600;color:var(--purple-light);margin-bottom:0.5rem;font-size:0.85rem;">✨ AI Professional Rewrite (C1 Level)</div>
+      <div style="font-size:0.875rem;color:var(--text-dim);line-height:1.7;">${r.rewrite}</div>
+    </div>`:''}`;
+    awardXP(20, 'writing analysis');
+    user.skills.writing = Math.min(100,(user.skills.writing||0)+3);
+    saveUser();
+  } catch(e) {
+    document.getElementById('writeResult').innerHTML = `<div class="card" style="color:#f87171;">⚠️ ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.textContent = 'Analyze Writing →';
+}
+
+// ─── PAGE: DAILY CHALLENGES ───────────────────────────────────────────────────
+const challengeTypes = ['spot_error','word_of_day','translation','dialogue','synonym'];
+const challengeLabels = {spot_error:'🔍 Spot the Error',word_of_day:'📖 Word of the Day',translation:'🌐 Translation Sprint',dialogue:'💬 Dialogue Completion',synonym:'🔄 Synonym Chain'};
+let challengeData = {};
+
+pages.challenges = function() {
+  const today = new Date().toDateString();
+  if (user.challengesCompleted.date !== today) {
+    user.challengesCompleted = {date: today, count: 0, done: []};
+    saveUser();
+  }
+  const done = user.challengesCompleted.done || [];
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">DAILY PRACTICE</div>
+  <div class="sec-title">Daily Challenges</div>
+  <div class="sec-sub">Complete all 5 challenges for +100 XP bonus. Resets every day.</div>
+  <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+    ${[0,1,2,3,4].map(i=>`<div style="width:32px;height:32px;border-radius:50%;border:2px solid ${done.includes(i)?'var(--green)':'var(--border)'};background:${done.includes(i)?'rgba(16,185,129,0.2)':'var(--surface)'};display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:${done.includes(i)?'var(--green)':'var(--text-muted)'};">${done.includes(i)?'✓':(i+1)}</div>`).join('')}
+    <span style="font-size:0.85rem;color:var(--text-muted);">${done.length}/5 completed</span>
+  </div>
+  <div class="grid-3" id="challengeCards">
+    ${challengeTypes.slice(0,5).map((t,i)=>`
+    <div class="card" style="cursor:pointer;border-color:${done.includes(i)?'rgba(16,185,129,0.4)':'var(--border)'};background:${done.includes(i)?'rgba(16,185,129,0.05)':'var(--surface)'};" onclick="${done.includes(i)?'':'startChallenge('+i+')'}">
+      <div style="font-size:1.5rem;margin-bottom:0.5rem;">${{spot_error:'🔍',word_of_day:'📖',translation:'🌐',dialogue:'💬',synonym:'🔄'}[t]}</div>
+      <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.25rem;">${challengeLabels[t]}</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);">${done.includes(i)?'✅ Completed':'Click to start'}</div>
+      <div style="margin-top:0.5rem;"><span class="tag ${done.includes(i)?'tag-green':'tag-purple'}">+20 XP</span></div>
+    </div>`).join('')}
+  </div>
+  <div id="challengeArea" style="margin-top:1.25rem;"></div>`;
+};
+
+async function startChallenge(index) {
+  const type = challengeTypes[index];
+  document.getElementById('challengeArea').innerHTML = loading('Generating challenge...');
+  try {
+    const data = await api('/api/generate', {type:'challenge', challengeType: type});
+    challengeData[index] = data.result;
+    renderChallenge(index, data.result);
+  } catch(e) {
+    document.getElementById('challengeArea').innerHTML = `<div class="card" style="color:#f87171;">⚠️ ${e.message}</div>`;
+  }
+}
+
+function renderChallenge(index, c) {
+  let html = `<div class="card" style="border-color:var(--border-glow);">
+    <div style="font-weight:600;font-size:1rem;margin-bottom:0.75rem;">${challengeLabels[challengeTypes[index]]}</div>`;
+
+  if (c.type==='spot_error') {
+    html += `<div style="margin-bottom:0.75rem;font-size:0.9rem;color:var(--text-dim);">${c.instruction}</div>
+    <div style="background:var(--surface);border-radius:10px;padding:1rem;font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">${c.text}</div>
+    <details><summary style="cursor:pointer;color:var(--purple-light);font-size:0.85rem;">Show Answers</summary>
+    <div style="margin-top:0.75rem;">${(c.errors||[]).map(e=>`<div style="margin-bottom:0.5rem;font-size:0.85rem;"><span style="color:#f87171;">"${e.wrong}"</span> → <span style="color:var(--green);">"${e.correct}"</span><br><span style="color:var(--text-muted);font-size:0.78rem;">${e.explanation}</span></div>`).join('')}</div></details>`;
+  }
+  else if (c.type==='word_of_day') {
+    html += `<div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--purple-light);margin-bottom:0.25rem;">${c.word}</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--cyan);margin-bottom:0.5rem;">${c.ipa||''}</div>
+    <div style="font-size:0.9rem;margin-bottom:0.75rem;">${c.definition}</div>
+    ${(c.examples||[]).map(e=>`<div style="font-size:0.85rem;color:var(--text-dim);font-style:italic;margin-bottom:0.25rem;">"${e}"</div>`).join('')}
+    <div style="margin-top:0.75rem;padding:0.75rem;background:rgba(245,158,11,0.06);border-radius:8px;border:1px solid rgba(245,158,11,0.2);">
+      <div style="font-size:0.78rem;color:var(--gold);margin-bottom:0.25rem;">YOUR CHALLENGE:</div>
+      <div style="font-size:0.875rem;">${c.challenge||'Use this word in a sentence.'}</div>
+      <textarea class="textarea" id="wodAnswer" style="min-height:60px;margin-top:0.5rem;" placeholder="Write your sentence here..."></textarea>
+    </div>`;
+  }
+  else if (c.type==='translation') {
+    html += `<div style="margin-bottom:0.75rem;font-size:0.9rem;color:var(--text-dim);">${c.instruction}</div>
+    ${(c.sentences||[]).map((s,i)=>`<div style="margin-bottom:0.75rem;">
+      <div style="font-size:0.9rem;margin-bottom:0.25rem;"><strong>${i+1}.</strong> ${s.english}</div>
+      <details><summary style="cursor:pointer;color:var(--purple-light);font-size:0.78rem;">Show answer</summary><div style="color:var(--green);font-size:0.875rem;margin-top:0.2rem;">${s.answer}</div></details>
+    </div>`).join('')}`;
+  }
+  else if (c.type==='dialogue') {
+    html += `<div style="margin-bottom:0.5rem;font-size:0.82rem;color:var(--text-muted);">${c.context||''}</div>
+    ${(c.dialogue||[]).map((line,i)=>`<div style="margin-bottom:0.5rem;display:flex;gap:0.5rem;align-items:baseline;">
+      <strong style="font-size:0.85rem;color:var(--purple-light);flex-shrink:0;">${line.speaker}:</strong>
+      ${line.missing?`<div style="flex:1;"><input class="input" placeholder="Your answer..." style="font-size:0.875rem;" id="dlg_${i}"/>
+      <details style="margin-top:0.2rem;"><summary style="cursor:pointer;font-size:0.72rem;color:var(--text-muted);">hint: ${line.hint||'?'}</summary><div style="color:var(--green);font-size:0.78rem;">${line.answer}</div></details></div>`
+      :`<div style="font-size:0.875rem;color:var(--text-dim);">${line.line}</div>`}
+    </div>`).join('')}`;
+  }
+  else if (c.type==='synonym') {
+    html += `<div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--purple-light);margin-bottom:0.5rem;">${c.word}</div>
+    <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.75rem;">${c.instruction}</div>
+    ${(c.synonyms||[]).map(s=>`<div style="margin-bottom:0.6rem;padding:0.6rem;background:var(--surface);border-radius:8px;">
+      <div style="font-weight:600;font-size:0.9rem;">${s.word}</div>
+      <div style="font-size:0.8rem;color:var(--text-dim);">${s.nuance}</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);font-style:italic;">"${s.example}"</div>
+    </div>`).join('')}`;
+  }
+
+  html += `<button class="btn btn-primary btn-sm" style="margin-top:1rem;" onclick="completeChallenge(${index})">✓ Mark Complete (+20 XP)</button>
+  </div>`;
+  document.getElementById('challengeArea').innerHTML = html;
+}
+
+function completeChallenge(index) {
+  const done = user.challengesCompleted.done || [];
+  if (!done.includes(index)) {
+    done.push(index);
+    user.challengesCompleted.done = done;
+    user.challengesCompleted.count = done.length;
+    user.totalChallenges = (user.totalChallenges||0) + 1;
+    saveUser();
+    awardXP(20, 'challenge completed');
+    if (done.length === 5) {
+      setTimeout(() => { awardXP(100, 'all 5 challenges!'); }, 500);
+    }
+    pages.challenges();
+  }
+}
+
+// ─── PAGE: ROLE PLAY ──────────────────────────────────────────────────────────
+const scenarios = {
+  'Job Interview': 'a professional interviewer at a company. Be realistic, ask tough but fair questions',
+  'Restaurant Ordering': 'a waiter at a nice restaurant. Take the order, answer questions about the menu',
+  'Airport Check-in': 'an airline check-in agent. Help the passenger check in, handle issues',
+  'Doctor Appointment': 'a doctor. Take symptoms, ask questions, give advice (remind this is practice only)',
+  'Hotel Check-in': 'a hotel receptionist. Check in the guest, answer questions about amenities',
+  'Shopping': 'a shop assistant in a clothing store. Help the customer find what they need',
+  'Business Meeting': 'a business colleague in a meeting. Discuss the agenda professionally',
+};
+
+let roleplayMessages = [];
+
+pages.roleplay = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">PRACTICE</div>
+  <div class="sec-title">Role Play Simulator</div>
+  <div class="sec-sub">Practice real-world scenarios with AI characters. Earn +10 XP per message.</div>
+  <div style="margin-bottom:1rem;">
+    <label class="label">Choose Scenario</label>
+    <div class="grid-3" id="scenarioGrid">
+      ${Object.keys(scenarios).map(s=>`<div class="card" style="cursor:pointer;text-align:center;padding:1rem;" onclick="startRoleplay('${s}')" onmouseover="this.style.borderColor='var(--border-glow)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:1.5rem;margin-bottom:0.35rem;">${{
+          'Job Interview':'💼','Restaurant Ordering':'🍽️','Airport Check-in':'✈️',
+          'Doctor Appointment':'🏥','Hotel Check-in':'🏨','Shopping':'🛍️','Business Meeting':'📊'
+        }[s]||'🎭'}</div>
+        <div style="font-size:0.875rem;font-weight:600;">${s}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div id="roleplayChat"></div>`;
+};
+
+function startRoleplay(scenario) {
+  roleplayMessages = [];
+  document.getElementById('roleplayChat').innerHTML = `
+  <div class="card" style="border-color:var(--border-glow);margin-bottom:0.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+      <div><span class="tag tag-purple">Scenario: ${scenario}</span></div>
+      <button class="btn btn-secondary btn-sm" onclick="endRoleplay('${scenario}')">End Session</button>
+    </div>
+  </div>
+  <div class="chat-wrap" style="height:calc(100vh - 400px);min-height:300px;">
+    <div class="chat-messages" id="rpMessages">
+      <div class="msg ai">
+        <div>Scene set! You are in a ${scenario} scenario. I'll play ${scenarios[scenario]}. You can start — go ahead! 🎭</div>
+        <div class="msg-meta">${new Date().toLocaleTimeString()}</div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input class="input" id="rpInput" placeholder="Your response..." onkeydown="if(event.key==='Enter')sendRoleplay('${scenario}')"/>
+      <button class="btn btn-primary" id="rpBtn" onclick="sendRoleplay('${scenario}')">Send →</button>
+    </div>
+  </div>`;
+  roleplayMessages = [{role:'assistant', content:`Scene set! You are in a ${scenario} scenario. I'll play ${scenarios[scenario]}. You can start — go ahead! 🎭`}];
+}
+
+async function sendRoleplay(scenario) {
+  const input = document.getElementById('rpInput');
+  const btn = document.getElementById('rpBtn');
+  const msg = input.value.trim();
+  if (!msg) return;
+  roleplayMessages.push({role:'user', content: msg});
+  const c = document.getElementById('rpMessages');
+  c.innerHTML += `<div class="msg user"><div>${msg}</div><div class="msg-meta">${new Date().toLocaleTimeString()}</div></div>`;
+  input.value = ''; btn.disabled = true;
+  const t = document.createElement('div'); t.className='typing'; t.id='rpt'; t.innerHTML='<span></span><span></span><span></span>';
+  c.appendChild(t); c.scrollTop=c.scrollHeight;
+  try {
+    const data = await api('/api/chat', {messages: roleplayMessages, language: user.language||'English', level: user.level||'B1', correctionMode:'Gentle', scenario});
+    document.getElementById('rpt')?.remove();
+    roleplayMessages.push({role:'assistant', content: data.reply});
+    c.innerHTML += `<div class="msg ai"><div>${data.reply.replace(/\n/g,'<br>')}</div><div class="msg-meta">${new Date().toLocaleTimeString()}</div></div>`;
+    c.scrollTop=c.scrollHeight;
+    awardXP(10, 'roleplay');
+    user.skills.speaking = Math.min(100,(user.skills.speaking||0)+2);
+    saveUser();
+  } catch(e) {
+    document.getElementById('rpt')?.remove();
+    c.innerHTML += `<div class="msg ai"><div>⚠️ ${e.message}</div></div>`;
+  }
+  btn.disabled = false;
+}
+
+async function endRoleplay(scenario) {
+  awardXP(25, 'roleplay session');
+  user.roleplaysCompleted = (user.roleplaysCompleted||0) + 1;
+  saveUser();
+  pages.roleplay();
+}
+
+// ─── PAGE: IDIOMS ─────────────────────────────────────────────────────────────
+pages.idioms = function() {
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">PRACTICE</div>
+  <div class="sec-title">Idiom Explorer</div>
+  <div class="sec-sub">Learn the expressions textbooks never teach. +10 XP per exploration.</div>
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;align-items:flex-end;">
+    <div style="flex:1;min-width:150px;">
+      <label class="label">Theme</label>
+      <select class="select" id="idiomTheme">
+        <option>Food</option><option>Emotions</option><option>Time</option><option>Weather</option>
+        <option>Animals</option><option>Money</option><option>Body Parts</option><option>Success</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" id="idiomBtn" onclick="exploreIdioms()">Explore Idioms →</button>
+  </div>
+  <div id="idiomResult"></div>`;
+};
+
+async function exploreIdioms() {
+  const theme = document.getElementById('idiomTheme').value;
+  const btn = document.getElementById('idiomBtn');
+  btn.disabled = true; btn.textContent = 'Loading...';
+  document.getElementById('idiomResult').innerHTML = loading('Finding idioms...');
+  try {
+    const data = await api('/api/generate', {type:'idioms', theme});
+    const idioms = data.result.idioms || [];
+    document.getElementById('idiomResult').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+      ${idioms.map(id=>`<div class="card" style="border-color:var(--border-glow);">
+        <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--purple-light);margin-bottom:0.35rem;">"${id.idiom}"</div>
+        <div style="font-size:0.9rem;color:var(--text);margin-bottom:0.5rem;">${id.meaning}</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.5rem;padding:0.6rem;background:rgba(245,158,11,0.06);border-radius:8px;border:1px solid rgba(245,158,11,0.15);">
+          📜 <strong style="color:var(--gold);">Origin:</strong> ${id.origin}
+        </div>
+        <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.5rem;font-style:italic;">"${id.example}"</div>
+        ${id.equivalents?`<div style="display:flex;flex-wrap:wrap;gap:0.35rem;">
+          ${Object.entries(id.equivalents).map(([lang,equiv])=>`<span class="tag tag-cyan">${lang}: ${equiv}</span>`).join('')}
+        </div>`:''}
+        <div style="margin-top:0.5rem;font-size:0.78rem;color:var(--text-muted);">${id.usage_tips||''}</div>
+      </div>`).join('')}
+    </div>`;
+    awardXP(10, 'idiom exploration');
+    user.idiomsExplored = (user.idiomsExplored||0) + 4;
+    user.skills.vocabulary = Math.min(100,(user.skills.vocabulary||0)+2);
+    saveUser();
+  } catch(e) {
+    document.getElementById('idiomResult').innerHTML = `<div class="card" style="color:#f87171;">⚠️ ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.textContent = 'Explore Idioms →';
+}
+
+// ─── PAGE: PROGRESS ───────────────────────────────────────────────────────────
+pages.progress = function() {
+  const skills = user.skills || {};
+  const xp = user.xp || 0;
+  const level = Math.floor(xp / 200) + 1;
+  const levelXP = xp % 200;
+  const levelPct = Math.round((levelXP / 200) * 100);
+  const allBadges = [
+    {id:'first_chat',icon:'💬',name:'First Chat',desc:'Send your first message',earned:xp>0},
+    {id:'grammar_pro',icon:'✏️',name:'Grammar Pro',desc:'Reach 50 grammar skill',earned:(skills.grammar||0)>=50},
+    {id:'word_collector',icon:'📚',name:'Word Collector',desc:'Learn 10+ words',earned:(user.wordsLearned||0)>=10},
+    {id:'student',icon:'🎓',name:'Student',desc:'Complete 5 lessons',earned:(user.lessonsCompleted||0)>=5},
+    {id:'streak_7',icon:'🔥',name:'Week Warrior',desc:'7-day streak',earned:(user.streak||0)>=7},
+    {id:'streak_30',icon:'🏆',name:'30-Day Legend',desc:'30-day streak',earned:(user.streak||0)>=30},
+    {id:'xp_500',icon:'⭐',name:'500 XP Club',desc:'Earn 500 XP',earned:xp>=500},
+    {id:'xp_1000',icon:'💫',name:'XP Master',desc:'Earn 1000 XP',earned:xp>=1000},
+    {id:'polyglot',icon:'🌐',name:'Polyglot',desc:'Use translation 5+ times',earned:(user.translationsUsed||0)>=5},
+    {id:'roleplay_pro',icon:'🎭',name:'Actor',desc:'Complete 3 role plays',earned:(user.roleplaysCompleted||0)>=3},
+    {id:'idiom_fan',icon:'💡',name:'Idiom Fan',desc:'Explore 10+ idioms',earned:(user.idiomsExplored||0)>=10},
+    {id:'challenger',icon:'⚡',name:'Challenger',desc:'Complete 10 challenges',earned:(user.totalChallenges||0)>=10},
+  ];
+  const skillColors = {speaking:'var(--purple)',grammar:'var(--cyan)',vocabulary:'var(--green)',listening:'var(--gold)',reading:'var(--pink)',writing:'var(--purple-light)'};
+  const cefrLevels = ['A1','A2','B1','B2','C1','C2'];
+  const cefrIdx = cefrLevels.indexOf(user.level||'B1');
+  const earnedCount = allBadges.filter(b=>b.earned).length;
+
+  document.getElementById('content').innerHTML = `
+  <div class="sec-badge">YOUR PROGRESS</div>
+  <div class="sec-title">My Progress</div>
+  <div class="sec-sub">Your full learning journey at a glance.</div>
+
+  <!-- XP Level card -->
+  <div class="card" style="margin-bottom:1rem;border-color:var(--border-glow);">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.75rem;">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--purple-light);">Level ${level}</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);">${xp} XP total · ${200 - levelXP} XP to Level ${level+1}</div>
+      </div>
+      <div style="text-align:right;">
+        <span class="tag tag-purple" style="font-size:0.8rem;">${user.level||'B1'} CEFR</span>
+      </div>
+    </div>
+    <div style="height:10px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden;">
+      <div style="height:100%;width:${levelPct}%;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:100px;transition:width 1.2s ease;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:0.4rem;">
+      <span style="font-size:0.7rem;color:var(--text-muted);">Level ${level}</span>
+      <span style="font-size:0.7rem;color:var(--text-muted);">${levelPct}%</span>
+      <span style="font-size:0.7rem;color:var(--text-muted);">Level ${level+1}</span>
+    </div>
+  </div>
+
+  <div class="grid-2" style="align-items:start;margin-bottom:1rem;">
+    <div class="card">
+      <div style="font-weight:600;margin-bottom:1rem;color:var(--text);">Skill Levels</div>
+      ${Object.entries(skills).map(([k,v])=>`<div class="skill-row">
+        <div class="skill-label">${k}</div>
+        <div class="skill-track"><div class="skill-fill" style="width:${v}%;background:linear-gradient(90deg,${skillColors[k]||'var(--purple)'},${skillColors[k]||'var(--purple-light)'});"></div></div>
+        <div class="skill-val">${v}</div>
+      </div>`).join('')}
+    </div>
+    <div class="card">
+      <div style="font-weight:600;margin-bottom:1rem;color:var(--text);">Statistics</div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        ${[
+          ['🏅 Total XP', xp, 'var(--purple-light)'],
+          ['🔥 Day Streak', (user.streak||0)+' days', 'var(--gold)'],
+          ['🎓 Lessons Done', user.lessonsCompleted||0, 'var(--green)'],
+          ['📚 Words Learned', user.wordsLearned||0, 'var(--cyan)'],
+          ['🃏 Flashcard Deck', (user.flashcards||[]).length+' cards', 'var(--pink)'],
+          ['⚡ Challenges Done', user.totalChallenges||0, 'var(--purple-light)'],
+        ].map(([label, val, color])=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.45rem 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:0.85rem;color:var(--text-dim);">${label}</span>
+          <span style="font-weight:700;color:${color};font-family:'JetBrains Mono',monospace;">${val}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">
+      <div style="font-weight:600;color:var(--text);">Achievements</div>
+      <span class="tag tag-${earnedCount===allBadges.length?'green':'purple'}">${earnedCount}/${allBadges.length} earned</span>
+    </div>
+    <div class="badge-grid">
+      ${allBadges.map(b=>`<div class="badge ${b.earned?'earned':''}" title="${b.desc}">
+        <div class="badge-icon" style="opacity:${b.earned?1:0.25};">${b.icon}</div>
+        <div class="badge-name">${b.name}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+};
+
+// ─── START ────────────────────────────────────────────────────────────────────
+showPage('dashboard', document.querySelector('.sb-item.active'));
+</script>
+</body>
+</html>

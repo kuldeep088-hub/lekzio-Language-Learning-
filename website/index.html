@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lekzio — Learn Any Language with AI</title>
+  <meta name="description" content="Learn any language with AI-powered conversations, adaptive lessons, and real-time feedback. Lekzio uses Claude AI to help you master Spanish, French, Japanese and more." />
+  <meta property="og:title" content="Lekzio — Learn Any Language with AI" />
+  <meta property="og:description" content="Master Spanish, French, Japanese and more through real AI conversations and adaptive lessons powered by Claude AI." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050810;
+      --bg-2: #080d1a;
+      --surface: rgba(255,255,255,0.04);
+      --surface-hover: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.08);
+      --border-glow: rgba(139,92,246,0.35);
+      --purple: #8b5cf6;
+      --purple-light: #a78bfa;
+      --purple-dim: rgba(139,92,246,0.15);
+      --cyan: #06b6d4;
+      --cyan-dim: rgba(6,182,212,0.12);
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --gold: #f59e0b;
+      --green: #10b981;
+      --pink: #ec4899;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: rgba(5,8,16,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    nav.scrolled { background: rgba(5,8,16,0.97); }
+    .nav-logo a { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--text); text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+    .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.875rem; font-weight: 500; padding: 0.4rem 0.75rem; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: var(--text); background: var(--surface-hover); }
+    .nav-links a.active { color: var(--purple-light); }
+    .nav-cta { background: var(--purple) !important; color: #fff !important; padding: 0.45rem 1rem !important; border-radius: 8px !important; font-weight: 600 !important; }
+    .nav-cta:hover { opacity: 0.85; }
+    .hamburger { display: none; background: none; border: 1px solid var(--border); color: var(--text); font-size: 1.2rem; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+    @media (max-width: 900px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--bg-2); padding: 1rem; border-bottom: 1px solid var(--border); gap: 0.25rem; max-height: calc(100vh - 64px); overflow-y: auto; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: block; }
+      .nav-links a { padding: 0.65rem 1rem; font-size: 1rem; }
+      .nav-links .nav-cta { text-align: center; margin-top: 0.25rem; }
+    }
+    @media (max-width: 600px) { nav { padding: 0 1rem; } }
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center;
+      padding: clamp(5rem,12vw,8rem) 1.5rem clamp(2rem,5vw,4rem); position: relative; overflow: hidden;
+    }
+    .hero-bg-glow { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 700px; height: 500px; background: radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, transparent 70%); pointer-events: none; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--purple-dim); border: 1px solid var(--border-glow); border-radius: 100px; padding: 0.35rem 1rem; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; color: var(--purple-light); margin-bottom: 1.5rem; letter-spacing: 0.05em; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
+    .hero h1 .accent { color: var(--purple-light); }
+    .hero-sub { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-dim); max-width: 600px; margin: 0 auto 2.5rem; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+    .btn-primary { background: linear-gradient(135deg, var(--purple), #6d28d9); color: #fff; padding: 0.85rem 2rem; border-radius: 10px; font-weight: 600; font-size: 1rem; text-decoration: none; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 0 30px rgba(139,92,246,0.3); display: inline-block; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(139,92,246,0.5); }
+    .btn-secondary { background: var(--surface); color: var(--text); padding: 0.85rem 2rem; border-radius: 10px; font-weight: 600; font-size: 1rem; text-decoration: none; border: 1px solid var(--border); cursor: pointer; transition: background 0.2s, border-color 0.2s; display: inline-block; }
+    .btn-secondary:hover { background: var(--surface-hover); border-color: var(--purple); }
+    .floating-words { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .float-word { position: absolute; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; opacity: 0.12; animation: floatUp 8s linear infinite; color: var(--purple-light); }
+    @keyframes floatUp { 0% { transform: translateY(100vh) rotate(-10deg); opacity: 0; } 10% { opacity: 0.12; } 90% { opacity: 0.12; } 100% { transform: translateY(-100px) rotate(10deg); opacity: 0; } }
+    .btn-sm { padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; display: inline-block; }
+    .btn-sm-primary { background: var(--purple); color: #fff; }
+    .btn-sm-primary:hover { opacity: 0.85; }
+    .btn-sm-outline { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+    .btn-sm-outline:hover { border-color: var(--purple); color: var(--text); }
+    .stats-section { padding: 5rem 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; text-align: center; transition: border-color 0.3s, background 0.3s; }
+    .stat-card:hover { border-color: var(--border-glow); background: var(--surface-hover); }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--purple-light); line-height: 1; margin-bottom: 0.5rem; }
+    .stat-label { color: var(--text-dim); font-size: 0.875rem; }
+    .section-pad { padding: clamp(3rem,6vw,5rem) 0; }
+    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section-badge { display: inline-block; background: var(--purple-dim); border: 1px solid var(--border-glow); border-radius: 100px; padding: 0.25rem 0.8rem; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--purple-light); margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .section-sub { color: var(--text-dim); font-size: 1rem; max-width: 550px; margin: 0 auto; }
+    .feat-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    @media (max-width: 900px) { .feat-grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .feat-grid-3, .feat-grid-4 { grid-template-columns: 1fr; } }
+    .feat-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+    @media (max-width: 1000px) { .feat-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+    .feat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; transition: border-color 0.3s, background 0.3s, transform 0.3s; }
+    .feat-card:hover { border-color: var(--border-glow); background: var(--surface-hover); transform: translateY(-3px); }
+    .feat-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .feat-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.4rem; }
+    .feat-desc { color: var(--text-dim); font-size: 0.875rem; line-height: 1.5; }
+    .marquee-section { padding: 1.5rem 0; overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg-2); }
+    .marquee-track { display: flex; gap: 2rem; animation: marquee 30s linear infinite; width: max-content; }
+    .marquee-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
+    .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--purple); flex-shrink: 0; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .steps-grid { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 1rem; align-items: center; }
+    @media (max-width: 768px) { .steps-grid { grid-template-columns: 1fr; } .step-arrow { display: none; } }
+    .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; text-align: center; transition: border-color 0.3s; }
+    .step-card:hover { border-color: var(--border-glow); }
+    .step-num { width: 48px; height: 48px; border-radius: 50%; background: var(--purple-dim); border: 2px solid var(--border-glow); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--purple-light); margin: 0 auto 1rem; }
+    .step-title { font-weight: 600; margin-bottom: 0.5rem; }
+    .step-desc { color: var(--text-dim); font-size: 0.875rem; }
+    .step-arrow { font-size: 1.5rem; color: var(--text-muted); }
+    .test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    @media (max-width: 768px) { .test-grid { grid-template-columns: 1fr; } }
+    .test-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; transition: border-color 0.3s; }
+    .test-card:hover { border-color: var(--border-glow); }
+    .test-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
+    .test-text { color: var(--text-dim); font-size: 0.9rem; line-height: 1.65; margin-bottom: 1rem; font-style: italic; }
+    .test-author { display: flex; align-items: center; gap: 0.75rem; }
+    .test-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--cyan)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; color: #fff; flex-shrink: 0; }
+    .test-name { font-weight: 600; font-size: 0.875rem; }
+    .test-role { color: var(--text-muted); font-size: 0.78rem; }
+    .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    @media (max-width: 900px) { .price-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
+    .price-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; position: relative; transition: border-color 0.3s, transform 0.3s; }
+    .price-card:hover { border-color: var(--border-glow); transform: translateY(-3px); }
+    .price-card.popular { border-color: var(--purple); background: rgba(139,92,246,0.06); }
+    .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--purple), var(--purple-light)); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.9rem; border-radius: 100px; letter-spacing: 0.07em; white-space: nowrap; }
+    .price-name { font-weight: 700; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .price-amount { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 0.25rem; }
+    .price-amount span { font-size: 1rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif; }
+    .price-desc { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1.25rem; }
+    .price-list { list-style: none; margin-bottom: 1.5rem; }
+    .price-list li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-dim); padding: 0.3rem 0; }
+    .price-list .check { color: var(--green); } .price-list .cross { color: var(--text-muted); }
+    .btn-plan { display: block; text-align: center; padding: 0.7rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.2s; }
+    .btn-plan-outline { border: 1px solid var(--border); color: var(--text); }
+    .btn-plan-outline:hover { border-color: var(--purple); color: var(--purple-light); }
+    .btn-plan-purple { background: linear-gradient(135deg, var(--purple), #6d28d9); color: #fff; }
+    .btn-plan-purple:hover { opacity: 0.85; }
+    .waitlist-section { padding: 5rem 0; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .waitlist-inner { max-width: 600px; margin: 0 auto; text-align: center; }
+    .waitlist-form { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .waitlist-form input { flex: 1; min-width: 180px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1.1rem; color: var(--text); font-size: 0.95rem; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+    .waitlist-form input:focus { border-color: var(--purple); }
+    .waitlist-form input::placeholder { color: var(--text-muted); }
+    .waitlist-success { display: none; padding: 1.5rem; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; margin-top: 1.5rem; }
+    .waitlist-success h3 { color: var(--green); font-size: 1.2rem; margin-bottom: 0.4rem; }
+    .waitlist-success p { color: var(--text-dim); font-size: 0.875rem; }
+    .faq-section { padding: 5rem 0; }
+    .faq-list { max-width: 750px; margin: 0 auto 2rem; }
+    .faq-item { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden; }
+    .faq-q { width: 100%; background: var(--surface); border: none; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; padding: 1rem 1.25rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+    .faq-q:hover { background: var(--surface-hover); }
+    .faq-chevron { transition: transform 0.3s; font-size: 0.8rem; color: var(--text-muted); }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s; padding: 0 1.25rem; color: var(--text-dim); font-size: 0.9rem; line-height: 1.65; background: var(--bg-2); }
+    .faq-item.open .faq-a { max-height: 600px; padding: 1rem 1.25rem; }
+    .final-cta { padding: 5rem 0; text-align: center; position: relative; overflow: hidden; }
+    .final-cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 500px; height: 300px; background: radial-gradient(ellipse, rgba(139,92,246,0.15) 0%, transparent 70%); pointer-events: none; }
+    .final-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
+    .final-cta p { color: var(--text-dim); max-width: 450px; margin: 0 auto 2rem; }
+    footer { background: var(--bg-2); border-top: 1px solid var(--border); padding: 3rem 0 1.5rem; }
+    .footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; }
+    @media (max-width: 768px) { .footer-inner { grid-template-columns: 1fr; gap: 2rem; } }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--text); text-decoration: none; display: block; margin-bottom: 0.5rem; }
+    .footer-copy { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 0.5rem; }
+    .footer-dev { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 100px; padding: 0.2rem 0.7rem; font-size: 0.75rem; color: var(--gold); margin-top: 0.5rem; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-col h4 { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .footer-col a { display: block; color: var(--text-dim); text-decoration: none; font-size: 0.875rem; margin-bottom: 0.4rem; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--purple-light); }
+    .footer-social { display: flex; gap: 0.75rem; margin-top: 1rem; }
+    .social-btn { width: 44px; height: 44px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; transition: border-color 0.2s, background 0.2s; }
+    .social-btn:hover { border-color: var(--purple); background: var(--purple-dim); }
+    .footer-bottom { border-top: 1px solid var(--border); margin-top: 2rem; padding-top: 1.25rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; }
+    .video-section { padding: 4rem 0 5rem; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .video-wrapper { position: relative; max-width: 900px; margin: 0 auto; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-glow); box-shadow: 0 0 80px rgba(139,92,246,0.2), 0 0 0 1px rgba(139,92,246,0.15); }
+    .video-thumb { position: relative; width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, #0d0f1e 0%, #0e0b1f 50%, #080d1a 100%); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .video-thumb::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(6,182,212,0.1) 0%, transparent 60%); }
+    .video-ui { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 1.5rem; gap: 1rem; }
+    .video-ui-bar { height: 36px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; padding: 0 0.75rem; flex-shrink: 0; }
+    .video-ui-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .video-ui-label { font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); margin-left: 0.25rem; }
+    .video-ui-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; flex: 1; min-height: 0; }
+    .video-chat { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem; overflow: hidden; }
+    .video-msg { padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.72rem; line-height: 1.4; max-width: 85%; }
+    .video-msg.ai { background: var(--purple-dim); border: 1px solid rgba(139,92,246,0.2); color: var(--text-dim); align-self: flex-start; }
+    .video-msg.user { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text-dim); align-self: flex-end; }
+    .video-typing { display: flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.75rem; }
+    .video-typing span { width: 5px; height: 5px; border-radius: 50%; background: var(--purple-light); animation: typingPulse 1.2s infinite; }
+    .video-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .video-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingPulse { 0%,80%,100%{ opacity:0.3; transform:scale(0.8); } 40%{ opacity:1; transform:scale(1); } }
+    .video-stats { display: flex; flex-direction: column; gap: 0.6rem; }
+    .video-stat-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.8rem; }
+    .video-stat-label { font-size: 0.65rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.3rem; }
+    .video-stat-bar { height: 5px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; }
+    .video-stat-fill { height: 100%; border-radius: 100px; }
+    .video-stat-val { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.25rem; text-align: right; }
+    .play-btn { position: absolute; width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), #6d28d9); border: 3px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; z-index: 10; transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 0 40px rgba(139,92,246,0.5), 0 0 80px rgba(139,92,246,0.2); }
+    .play-btn:hover { transform: scale(1.1); box-shadow: 0 0 60px rgba(139,92,246,0.7), 0 0 100px rgba(139,92,246,0.3); }
+    .play-btn svg { width: 28px; height: 28px; fill: #fff; margin-left: 4px; }
+    .play-btn-ring { position: absolute; width: 96px; height: 96px; border-radius: 50%; border: 2px solid rgba(139,92,246,0.3); animation: ringPulse 2s infinite; }
+    @keyframes ringPulse { 0%{ transform:scale(1); opacity:1; } 100%{ transform:scale(1.5); opacity:0; } }
+    .video-overlay { position: absolute; inset: 0; background: rgba(5,8,16,0.45); z-index: 5; transition: background 0.3s; }
+    .video-thumb:hover .video-overlay { background: rgba(5,8,16,0.35); }
+    .video-caption { position: absolute; bottom: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 10; background: rgba(5,8,16,0.8); border: 1px solid var(--border); border-radius: 100px; padding: 0.35rem 1rem; font-size: 0.78rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; white-space: nowrap; backdrop-filter: blur(8px); }
+    .video-iframe-wrap { display: none; width: 100%; aspect-ratio: 16/9; }
+    .video-iframe-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+    .demo-player { display: none; width: 100%; background: #0a0d1a; border-radius: 0; overflow: hidden; }
+    .dp-topbar { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1rem; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); }
+    .dp-dots { display: flex; gap: 0.4rem; flex-shrink: 0; }
+    .dp-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dp-title { flex: 1; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); text-align: center; }
+    .dp-close { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.75rem; padding: 0.25rem 0.65rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+    .dp-close:hover { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #f87171; }
+    .dp-screen { padding: 1.25rem 1.5rem; min-height: 320px; display: flex; flex-direction: column; gap: 0.75rem; }
+    .dp-screen-label { font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; color: var(--purple-light); background: var(--purple-dim); border: 1px solid var(--border-glow); border-radius: 100px; padding: 0.2rem 0.75rem; align-self: flex-start; }
+    .dp-chat { flex: 1; display: flex; flex-direction: column; gap: 0.6rem; overflow: hidden; }
+    .dp-msg { padding: 0.55rem 0.85rem; border-radius: 10px; font-size: 0.82rem; line-height: 1.45; max-width: 80%; opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .dp-msg.show { opacity: 1; transform: translateY(0); }
+    .dp-msg.ai { background: var(--purple-dim); border: 1px solid rgba(139,92,246,0.25); color: var(--text-dim); align-self: flex-start; }
+    .dp-msg.user { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text); align-self: flex-end; }
+    .dp-msg.correction { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); color: #fbbf24; align-self: flex-start; font-size: 0.78rem; }
+    .dp-typing-row { display: flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.85rem; opacity: 0; transition: opacity 0.3s; }
+    .dp-typing-row.show { opacity: 1; }
+    .dp-typing-row span { width: 6px; height: 6px; border-radius: 50%; background: var(--purple-light); animation: typingPulse 1.2s infinite; }
+    .dp-typing-row span:nth-child(2) { animation-delay: 0.2s; }
+    .dp-typing-row span:nth-child(3) { animation-delay: 0.4s; }
+    .dp-input-bar { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 0.6rem 0.85rem; }
+    .dp-input-fake { flex: 1; font-size: 0.82rem; color: var(--text-dim); font-family: 'DM Sans', sans-serif; min-height: 1.2em; }
+    .dp-input-cursor { display: inline-block; width: 2px; height: 1em; background: var(--purple-light); animation: blink 1s infinite; vertical-align: text-bottom; margin-left: 1px; }
+    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+    .dp-send { width: 30px; height: 30px; background: var(--purple); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #fff; flex-shrink: 0; }
+    .dp-grammar-box { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+    .dp-grammar-text { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; font-size: 0.875rem; color: var(--text); line-height: 1.6; min-height: 60px; }
+    .dp-grammar-result { display: flex; flex-direction: column; gap: 0.6rem; transition: opacity 0.5s; }
+    .dp-grammar-score { font-size: 0.9rem; font-weight: 600; padding: 0.5rem 0; }
+    .dp-grammar-issue { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.85rem; font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+    .dp-radar-wrap { flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
+    .dp-radar-bars { display: flex; flex-direction: column; gap: 0.6rem; }
+    .dp-rbar { display: grid; grid-template-columns: 80px 1fr 36px; gap: 0.6rem; align-items: center; }
+    .dp-rbar-label { font-size: 0.75rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+    .dp-rbar-track { height: 7px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; }
+    .dp-rbar-fill { height: 100%; width: 0; border-radius: 100px; transition: width 1.2s ease; }
+    .dp-rbar-val { font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .dp-xp-badge { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.35); border-radius: 10px; padding: 0.65rem 1rem; font-size: 0.85rem; color: #34d399; text-align: center; font-weight: 600; transition: opacity 0.6s; margin-top: 0.5rem; }
+    .dp-card-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .dp-flashcard { width: 100%; max-width: 420px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glow); border-radius: 16px; padding: 2rem; text-align: center; box-shadow: 0 0 40px rgba(139,92,246,0.12); }
+    .dp-card-word { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--purple-light); margin-bottom: 0.25rem; }
+    .dp-card-lang { font-size: 0.8rem; color: var(--text-muted); }
+    .dp-card-meaning { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .dp-card-ipa { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--cyan); margin-bottom: 0.75rem; }
+    .dp-card-example { font-size: 0.875rem; color: var(--text-dim); margin-bottom: 0.5rem; }
+    .dp-card-mnemonic { font-size: 0.78rem; color: var(--gold); background: rgba(245,158,11,0.08); border-radius: 8px; padding: 0.4rem 0.75rem; margin-top: 0.25rem; }
+    .dp-card-btns { display: flex; gap: 0.5rem; transition: opacity 0.5s; }
+    .dp-card-btn { flex: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid; text-align: center; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+    .dp-dots-nav { display: flex; justify-content: center; gap: 0.5rem; padding: 0.75rem 0 1rem; }
+    .dp-dnav { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s, width 0.3s; }
+    .dp-dnav.active { background: var(--purple-light); width: 24px; border-radius: 4px; }
+    .video-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 900px; margin: 1.5rem auto 0; }
+    @media (max-width: 600px) { .video-highlights { grid-template-columns: 1fr; } .video-ui-body { grid-template-columns: 1fr; } .video-stats { display: none; } }
+    .video-hl { display: flex; align-items: center; gap: 0.6rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.83rem; color: var(--text-dim); }
+    .video-hl-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .back-top { position: fixed; bottom: 1.5rem; right: 1rem; width: 44px; height: 44px; background: var(--purple); border: none; border-radius: 10px; color: #fff; font-size: 1.1rem; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s; z-index: 100; display: flex; align-items: center; justify-content: center; }
+    @media (min-width: 600px) { .back-top { bottom: 2rem; right: 2rem; } }
+    .back-top.visible { opacity: 1; pointer-events: auto; }
+    .back-top:hover { transform: translateY(-3px); }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .text-center { text-align: center; }
+    .mt-2 { margin-top: 2rem; }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo"><a href="index.html">🗣 Lekzio</a></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html" class="nav-cta">Get Started →</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleNav()">☰</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="floating-words" aria-hidden="true">
+    <span class="float-word" style="left:8%;animation-delay:-1s;color:#a78bfa">Hola</span>
+    <span class="float-word" style="left:20%;animation-delay:-3s;color:#06b6d4">Bonjour</span>
+    <span class="float-word" style="left:35%;animation-delay:-5s">こんにちは</span>
+    <span class="float-word" style="left:55%;animation-delay:-2s;color:#ec4899">Ciao</span>
+    <span class="float-word" style="left:70%;animation-delay:-4s;color:#06b6d4">Olá</span>
+    <span class="float-word" style="left:82%;animation-delay:-1.5s">Merhaba</span>
+    <span class="float-word" style="left:12%;animation-delay:-6s;color:#ec4899">你好</span>
+    <span class="float-word" style="left:90%;animation-delay:-0.5s;color:#06b6d4">مرحبا</span>
+  </div>
+  <div style="position:relative;z-index:2;">
+    <h1>Learn Any Language with<br><span class="accent">Artificial Intelligence</span></h1>
+    <p class="hero-sub">Master Spanish, French, Japanese, Mandarin and more through real AI conversations, adaptive lessons, and personalized feedback.</p>
+    <div class="hero-btns">
+      <a href="register.html" class="btn-primary">Start Learning Free →</a>
+      <a href="features.html" class="btn-secondary">Explore Features →</a>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO DEMO SECTION -->
+<section class="video-section">
+  <div class="container">
+    <div class="section-header reveal" style="margin-bottom:2rem;">
+      <div class="section-badge">SEE IT IN ACTION</div>
+      <h2 class="section-title">Watch Lekzio Transform Your Learning</h2>
+      <p class="section-sub">Real AI conversations, instant grammar correction, adaptive lessons — all in one place.</p>
+    </div>
+    <div class="video-wrapper reveal">
+      <!-- IDLE THUMBNAIL -->
+      <div class="video-thumb" id="videoThumb" onclick="playDemo()">
+        <div class="video-ui">
+          <div class="video-ui-bar">
+            <div class="video-ui-dot" style="background:#ef4444;"></div>
+            <div class="video-ui-dot" style="background:#f59e0b;"></div>
+            <div class="video-ui-dot" style="background:#10b981;"></div>
+            <div class="video-ui-label">Lekzio — AI Conversation · English · B1</div>
+          </div>
+          <div class="video-ui-body">
+            <div class="video-chat">
+              <div class="video-msg ai">Hello! Let's practice English today. How was your weekend?</div>
+              <div class="video-msg user">I goed to the park with my friends!</div>
+              <div class="video-msg ai">Almost perfect! 💡 "goed" → "went" (irregular past tense).</div>
+            </div>
+            <div class="video-stats">
+              <div class="video-stat-card">
+                <div class="video-stat-label">SPEAKING</div>
+                <div class="video-stat-bar"><div class="video-stat-fill" style="width:72%;background:linear-gradient(90deg,#8b5cf6,#a78bfa);"></div></div>
+                <div class="video-stat-val">72 / 100</div>
+              </div>
+              <div class="video-stat-card">
+                <div class="video-stat-label">GRAMMAR</div>
+                <div class="video-stat-bar"><div class="video-stat-fill" style="width:58%;background:linear-gradient(90deg,#06b6d4,#0891b2);"></div></div>
+                <div class="video-stat-val">58 / 100</div>
+              </div>
+              <div class="video-stat-card">
+                <div class="video-stat-label">XP THIS SESSION</div>
+                <div class="video-stat-bar"><div class="video-stat-fill" style="width:45%;background:linear-gradient(90deg,#f59e0b,#f97316);"></div></div>
+                <div class="video-stat-val">+340 XP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="video-overlay"></div>
+        <div class="play-btn-ring"></div>
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-caption">▶ Play Demo</div>
+      </div>
+
+      <!-- LIVE ANIMATED DEMO (shown after play click) -->
+      <div class="demo-player" id="demoPlayer">
+        <!-- Top bar -->
+        <div class="dp-topbar">
+          <div class="dp-dots">
+            <div class="dp-dot" style="background:#ef4444;"></div>
+            <div class="dp-dot" style="background:#f59e0b;"></div>
+            <div class="dp-dot" style="background:#10b981;"></div>
+          </div>
+          <div class="dp-title" id="dpTitle">Lekzio — AI Conversation · English · B1</div>
+          <button class="dp-close" onclick="closeDemo()">✕ Close</button>
+        </div>
+
+        <!-- Screens -->
+        <div class="dp-screen" id="screen1">
+          <div class="dp-screen-label">Scene 1 of 4 &nbsp;·&nbsp; AI Conversation</div>
+          <div class="dp-chat" id="dpChat">
+            <!-- messages injected by JS -->
+          </div>
+          <div class="dp-input-bar">
+            <div class="dp-input-fake" id="dpInput"></div>
+            <div class="dp-send">➤</div>
+          </div>
+        </div>
+
+        <div class="dp-screen" id="screen2" style="display:none;">
+          <div class="dp-screen-label">Scene 2 of 4 &nbsp;·&nbsp; Grammar Checker</div>
+          <div class="dp-grammar-box">
+            <div class="dp-grammar-text" id="dpGramText"></div>
+            <div class="dp-grammar-result" id="dpGramResult" style="opacity:0;">
+              <div class="dp-grammar-score">Grammar Score: <span style="color:#10b981;font-weight:700;">76 / 100</span></div>
+              <div class="dp-grammar-issue">⚠ <strong>Wrong tense:</strong> "have went" → <span style="color:#a78bfa;">"went"</span> (simple past, not present perfect)</div>
+              <div class="dp-grammar-issue">💡 <strong>Irregular verb:</strong> "buyed" → <span style="color:#a78bfa;">"bought"</span> ("buy" is irregular)</div>
+              <div class="dp-grammar-issue">✅ Subject-verb agreement is correct. Sentence structure is clear.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dp-screen" id="screen3" style="display:none;">
+          <div class="dp-screen-label">Scene 3 of 4 &nbsp;·&nbsp; Skill Radar</div>
+          <div class="dp-radar-wrap">
+            <div class="dp-radar-bars" id="dpRadarBars">
+              <div class="dp-rbar"><div class="dp-rbar-label">Speaking</div><div class="dp-rbar-track"><div class="dp-rbar-fill" data-w="78" style="background:linear-gradient(90deg,#8b5cf6,#a78bfa);"></div></div><div class="dp-rbar-val">78</div></div>
+              <div class="dp-rbar"><div class="dp-rbar-label">Grammar</div><div class="dp-rbar-track"><div class="dp-rbar-fill" data-w="65" style="background:linear-gradient(90deg,#06b6d4,#0891b2);"></div></div><div class="dp-rbar-val">65</div></div>
+              <div class="dp-rbar"><div class="dp-rbar-label">Vocabulary</div><div class="dp-rbar-track"><div class="dp-rbar-fill" data-w="88" style="background:linear-gradient(90deg,#10b981,#059669);"></div></div><div class="dp-rbar-val">88</div></div>
+              <div class="dp-rbar"><div class="dp-rbar-label">Listening</div><div class="dp-rbar-track"><div class="dp-rbar-fill" data-w="55" style="background:linear-gradient(90deg,#f59e0b,#f97316);"></div></div><div class="dp-rbar-val">55</div></div>
+              <div class="dp-rbar"><div class="dp-rbar-label">Reading</div><div class="dp-rbar-track"><div class="dp-rbar-fill" data-w="91" style="background:linear-gradient(90deg,#ec4899,#be185d);"></div></div><div class="dp-rbar-val">91</div></div>
+              <div class="dp-rbar"><div class="dp-rbar-label">Writing</div><div class="dp-rbar-track"><div class="dp-rbar-fill" data-w="70" style="background:linear-gradient(90deg,#a78bfa,#7c3aed);"></div></div><div class="dp-rbar-val">70</div></div>
+            </div>
+            <div class="dp-xp-badge" id="dpXP" style="opacity:0;">+420 XP earned this session 🎉</div>
+          </div>
+        </div>
+
+        <div class="dp-screen" id="screen4" style="display:none;">
+          <div class="dp-screen-label">Scene 4 of 4 &nbsp;·&nbsp; Vocabulary Flashcard</div>
+          <div class="dp-card-wrap">
+            <div class="dp-flashcard" id="dpFlashcard">
+              <div class="dp-card-front" id="dpCardFront">
+                <div class="dp-card-word">perseverance</div>
+                <div class="dp-card-lang">🇬🇧 English · C1 Vocabulary</div>
+              </div>
+              <div class="dp-card-back" id="dpCardBack" style="display:none;">
+                <div class="dp-card-meaning">continued effort despite difficulty</div>
+                <div class="dp-card-ipa">/ˌpɜː.sɪˈvɪər.əns/</div>
+                <div class="dp-card-example">"Her <strong>perseverance</strong> paid off in the end."</div>
+                <div class="dp-card-mnemonic">💡 "Persevere" + "-ance" — keep going, no matter what</div>
+              </div>
+            </div>
+            <div class="dp-card-btns" id="dpCardBtns" style="opacity:0;">
+              <div class="dp-card-btn" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#f87171;">Again</div>
+              <div class="dp-card-btn" style="background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.4);color:#fbbf24;">Hard</div>
+              <div class="dp-card-btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#34d399;">Good</div>
+              <div class="dp-card-btn" style="background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.4);color:#a78bfa;">Easy</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress dots -->
+        <div class="dp-dots-nav">
+          <div class="dp-dnav active" id="dn1"></div>
+          <div class="dp-dnav" id="dn2"></div>
+          <div class="dp-dnav" id="dn3"></div>
+          <div class="dp-dnav" id="dn4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Highlights -->
+    <div class="video-highlights reveal">
+      <div class="video-hl"><span class="video-hl-icon">💬</span>Real-time AI conversation with instant correction</div>
+      <div class="video-hl"><span class="video-hl-icon">📊</span>Live skill radar tracks your progress every session</div>
+      <div class="video-hl"><span class="video-hl-icon">🎯</span>Adapts to your CEFR level automatically</div>
+    </div>
+  </div>
+</section>
+
+
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card reveal"><div class="stat-num" data-target="30" data-suffix="+">0</div><div class="stat-label">AI Features</div></div>
+      <div class="stat-card reveal"><div class="stat-num" data-target="10" data-suffix="+">0</div><div class="stat-label">Languages Supported</div></div>
+      <div class="stat-card reveal"><div class="stat-num" style="font-size:1.8rem;padding-top:0.35rem">A1–C2</div><div class="stat-label">CEFR Levels</div></div>
+      <div class="stat-card reveal"><div class="stat-num" data-target="100" data-suffix="%">0</div><div class="stat-label">AI Powered</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">CORE FEATURES</div>
+      <h2 class="section-title">Everything You Need to Reach Fluency</h2>
+      <p class="section-sub">Six powerful AI tools built around how humans actually learn languages.</p>
+    </div>
+    <div class="feat-grid-3">
+      <div class="feat-card reveal"><div class="feat-icon">💬</div><div class="feat-title">AI Conversation Partner</div><div class="feat-desc">Chat with a native-speaker AI adapted to your CEFR level. Real-time streaming with gentle, strict, or silent correction modes.</div></div>
+      <div class="feat-card reveal"><div class="feat-icon">✏️</div><div class="feat-title">Grammar Checker</div><div class="feat-desc">Deep analysis with rule names, severity levels, and a 0–100 score. Supports all 10 languages with detailed explanations.</div></div>
+      <div class="feat-card reveal"><div class="feat-icon">📚</div><div class="feat-title">Vocabulary Flashcards</div><div class="feat-desc">AI-generated cards with IPA phonetics, mnemonics, collocations, and the SM-2 spaced repetition algorithm.</div></div>
+    </div>
+    <div class="text-center mt-2">
+      <a href="features.html" class="btn-secondary">View All 30+ Features →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" style="background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">ADVANCED AI TOOLS</div>
+      <h2 class="section-title">Next-Level Language Intelligence</h2>
+      <p class="section-sub">Powerful tools that adapt to your unique learning journey in real time.</p>
+    </div>
+    <div class="feat-grid-4">
+      <div class="feat-card reveal"><div class="feat-icon">🧠</div><div class="feat-title">AI Personal Tutor</div><div class="feat-desc">Generates a personalized 7-day improvement plan based on your skill scores, grammar history, and XP patterns.</div></div>
+      <div class="feat-card reveal"><div class="feat-icon">📖</div><div class="feat-title">Interactive Story Mode</div><div class="feat-desc">Branching narratives in your target language. 5 genres — your choices shape what happens next.</div></div>
+      <div class="feat-card reveal"><div class="feat-icon">🎭</div><div class="feat-title">Role Play Simulator</div><div class="feat-desc">8 real-world scenarios — job interview, restaurant, airport, and more — with full AI evaluation at the end.</div></div>
+      <div class="feat-card reveal"><div class="feat-icon">✍️</div><div class="feat-title">Writing Coach</div><div class="feat-desc">Advanced register, coherence, and tone analysis with a professional AI rewrite included in the feedback.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW FEATURES PREVIEW -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">NEW FEATURES</div>
+      <h2 class="section-title">Just Added — Explore What's New</h2>
+      <p class="section-sub">From memory science to real-time duels — Lekzio keeps growing with tools that make you unstoppable.</p>
+    </div>
+    <div class="feat-grid-4">
+      <div class="feat-card reveal">
+        <div class="feat-icon">📡</div>
+        <div class="feat-title">Skill Radar Chart</div>
+        <div class="feat-desc">A visual radar updated after every session showing your proficiency across 6 dimensions: Reading, Writing, Speaking, Listening, Vocabulary, and Grammar.</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🎓</div>
+        <div class="feat-title">CEFR Level Test</div>
+        <div class="feat-desc">A formal 20-question adaptive test that places you accurately on the A1–C2 scale and generates a downloadable digital Level Certificate.</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🎧</div>
+        <div class="feat-title">Shadowing Mode</div>
+        <div class="feat-desc">Repeat AI-spoken sentences and get a scored analysis of your timing, rhythm, and intonation. The elite technique used by polyglots — now accessible to everyone.</div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🗞️</div>
+        <div class="feat-title">AI News Reader</div>
+        <div class="feat-desc">Real-world news automatically simplified to your CEFR level with vocabulary explanations in context. Stay informed and keep learning — every single day.</div>
+      </div>
+    </div>
+    <div class="text-center mt-2">
+      <a href="features.html" class="btn-secondary">See All Features →</a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>AI Conversation</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Grammar Checker</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Vocabulary Flashcards</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Lesson Generator</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Translation with Context</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Daily Challenges</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AI Personal Tutor</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Story Mode</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Role Play Simulator</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Writing Coach</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Smart Learning Path</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Achievement System</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Pronunciation Coach</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Idiom Explorer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🥊 AI Debate Partner</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>💙 Emotion-Aware Tutor</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📔 Dream Journal</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🗞️ AI News Reader</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎙️ Accent Coach</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>⚔️ Live Duels</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🔥 Streak System</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🏅 XP Leaderboard</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>👾 Boss Battles</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🧩 Sentence Builder</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎧 Shadowing Mode</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🖼️ Image Vocabulary</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🗺️ Word Maps</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📋 Mistake Journal</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🙏 Cultural Etiquette</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>😎 Slang Mode</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎬 Movie Quotes</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📡 Skill Radar</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📬 Weekly Report</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎓 CEFR Test</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📉 Forgetting Curve</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>CEFR A1–C2</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>SM-2 Spaced Repetition</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>SSE Streaming</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AI Conversation</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Grammar Checker</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Vocabulary Flashcards</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Lesson Generator</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Translation with Context</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Daily Challenges</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AI Personal Tutor</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Story Mode</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Role Play Simulator</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Writing Coach</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Smart Learning Path</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Achievement System</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Pronunciation Coach</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Idiom Explorer</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🥊 AI Debate Partner</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>💙 Emotion-Aware Tutor</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📔 Dream Journal</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🗞️ AI News Reader</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎙️ Accent Coach</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>⚔️ Live Duels</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🔥 Streak System</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🏅 XP Leaderboard</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>👾 Boss Battles</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🧩 Sentence Builder</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎧 Shadowing Mode</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🖼️ Image Vocabulary</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🗺️ Word Maps</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📋 Mistake Journal</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🙏 Cultural Etiquette</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>😎 Slang Mode</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎬 Movie Quotes</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📡 Skill Radar</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📬 Weekly Report</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>🎓 CEFR Test</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>📉 Forgetting Curve</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>CEFR A1–C2</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>SM-2 Spaced Repetition</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>SSE Streaming</span>
+  </div>
+</div>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">HOW IT WORKS</div>
+      <h2 class="section-title">Three Steps to Fluency</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-num">1</div>
+        <div class="step-title">Set Your Goal</div>
+        <div class="step-desc">Choose your target language, current CEFR level, and learning goal. Lekzio builds your personalized path instantly.</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card reveal">
+        <div class="step-num">2</div>
+        <div class="step-title">Learn with AI</div>
+        <div class="step-desc">Converse, practice grammar, read interactive stories, and complete daily challenges — all adapted to your exact level.</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card reveal">
+        <div class="step-num">3</div>
+        <div class="step-title">Track Progress</div>
+        <div class="step-desc">Earn XP, unlock achievements, and watch your analytics improve as you advance from A1 all the way to C2.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" style="background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">TESTIMONIALS</div>
+      <h2 class="section-title">Early Feedback from Beta Testers</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"The AI conversation partner feels genuinely natural. It corrects me without making me feel embarrassed — exactly what I needed after years of struggling with French."</p>
+        <div class="test-author"><div class="test-avatar">SM</div><div><div class="test-name">Sarah M.</div><div class="test-role">French learner — B1 level</div></div></div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"Story Mode is addictive. I've spent more time on Lekzio in one week than I did on Duolingo in six months. The branching narratives keep me completely hooked."</p>
+        <div class="test-author"><div class="test-avatar" style="background:linear-gradient(135deg,#06b6d4,#10b981)">JK</div><div><div class="test-name">James K.</div><div class="test-role">Japanese learner — A2 level</div></div></div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"The Grammar Checker is incredible. It doesn't just flag errors — it explains WHY they're wrong and gives the rule name. I've learned more in 2 weeks than in 3 months of classes."</p>
+        <div class="test-author"><div class="test-avatar" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">AR</div><div><div class="test-name">Ana R.</div><div class="test-role">German learner — A1 level</div></div></div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">"As a language teacher, I'm impressed by the depth. The spaced repetition is genuinely SM-2, the CEFR calibration is accurate, and the AI feedback is sophisticated."</p>
+        <div class="test-author"><div class="test-avatar" style="background:linear-gradient(135deg,#f59e0b,#f97316)">DL</div><div><div class="test-name">Dr. David L.</div><div class="test-role">Language educator &amp; tester</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="waitlist-section">
+  <div class="container">
+    <div class="waitlist-inner">
+      <div class="section-badge">GET STARTED FREE</div>
+      <h2 class="section-title reveal">Start Learning Today</h2>
+      <p class="section-sub reveal" style="margin-bottom:0">Start learning for free — no credit card needed. Pro plan unlocks all 30+ AI features.</p>
+      <div style="margin-top:1.5rem;">
+        <a href="register.html" class="btn-primary" style="font-size:1.05rem;padding:0.95rem 2.5rem;">Create Free Account →</a>
+        <a href="login.html" style="display:block;margin-top:1rem;color:var(--text-muted);font-size:0.875rem;text-decoration:none;">Already have an account? <span style="color:var(--purple-light);">Log in →</span></a>
+      </div>
+      <p style="color:var(--text-muted);font-size:0.78rem;margin-top:0.75rem;">No credit card required. Free plan available forever.</p>
+    </div>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">FAQ</div>
+      <h2 class="section-title">Common Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is Lekzio available now?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Yes! Lekzio is fully live and ready to use. Sign up for a free account in 60 seconds — no credit card required. The Free plan gives you access to 5 core AI features immediately.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How is Lekzio different from Duolingo?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio uses a real Claude AI for genuine, adaptive conversations — not scripted responses. Every lesson, correction, and story is generated fresh. There's no shallow gamification layer — just deep, effective learning rooted in linguistics.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What languages are supported?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">We support English, Hindi, Spanish, French, German, Italian, Japanese, Mandarin, Portuguese, and Arabic at launch. More languages are planned for future updates.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is the free plan really free forever?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Yes. The Free plan gives you 5 core features, 50 messages/day, and 1 language — forever. No credit card required. Upgrade to Pro anytime for the full experience.</div>
+      </div>
+    </div>
+    <div class="text-center"><a href="faq.html" class="btn-secondary">See All FAQs →</a></div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="reveal">
+      <h2>Ready to become fluent?</h2>
+      <p>Join thousands of learners already building fluency with AI. Start for free — no credit card needed.</p>
+      <a href="register.html" class="btn-primary">Start Your Journey →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <a href="index.html" class="footer-logo">🗣 Lekzio</a>
+        <p class="footer-copy">© 2026 Lekzio. All rights reserved.</p>
+        <span class="footer-dev" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);color:var(--green);">🟢 Live &amp; fully operational</span>
+        <div class="footer-social">
+          <a href="#" class="social-btn" title="Twitter">🐦</a>
+          <a href="#" class="social-btn" title="GitHub">🐙</a>
+          <a href="#" class="social-btn" title="Discord">💬</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <a href="index.html">Home</a>
+          <a href="features.html">Features</a>
+          
+          <a href="about.html">About</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="faq.html">FAQ</a>
+          <a href="contact.html">Contact</a>
+          <a href="login.html">Login</a>
+          <a href="register.html">Get Started</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">Lekzio is currently in development</div>
+  </div>
+</footer>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+  // ── Animated Demo Player ──
+  let demoTimeout = [];
+
+  function clearDemoTimers() { demoTimeout.forEach(clearTimeout); demoTimeout = []; }
+
+  function t(fn, ms) { demoTimeout.push(setTimeout(fn, ms)); }
+
+  function playDemo() {
+    document.getElementById('videoThumb').style.display = 'none';
+    const player = document.getElementById('demoPlayer');
+    player.style.display = 'block';
+    runScene1();
+  }
+
+  function closeDemo() {
+    clearDemoTimers();
+    document.getElementById('demoPlayer').style.display = 'none';
+    document.getElementById('videoThumb').style.display = 'flex';
+    // reset all screens
+    ['screen1','screen2','screen3','screen4'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = id === 'screen1' ? 'flex' : 'none';
+    });
+    document.getElementById('dpChat').innerHTML = '';
+    document.getElementById('dpInput').innerHTML = '';
+    document.getElementById('dpGramText').textContent = '';
+    document.getElementById('dpGramResult').style.opacity = '0';
+    document.getElementById('dpXP').style.opacity = '0';
+    document.querySelectorAll('.dp-rbar-fill').forEach(el => el.style.width = '0');
+    document.getElementById('dpCardBack').style.display = 'none';
+    document.getElementById('dpCardFront').style.display = 'block';
+    document.getElementById('dpCardBtns').style.opacity = '0';
+    setDot(1);
+  }
+
+  function setDot(n) {
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('dn'+i).classList.toggle('active', i === n);
+    }
+  }
+
+  function addMsg(chat, cls, text, delay) {
+    t(() => {
+      const m = document.createElement('div');
+      m.className = 'dp-msg ' + cls;
+      m.textContent = text;
+      chat.appendChild(m);
+      requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('show')));
+      chat.scrollTop = chat.scrollHeight;
+    }, delay);
+  }
+
+  function typeInto(el, text, delay, speed) {
+    t(() => {
+      let i = 0;
+      el.innerHTML = '<span class="dp-input-cursor"></span>';
+      const iv = setInterval(() => {
+        if (i < text.length) {
+          el.innerHTML = text.slice(0, ++i) + '<span class="dp-input-cursor"></span>';
+        } else {
+          clearInterval(iv);
+        }
+      }, speed || 60);
+    }, delay);
+  }
+
+  function switchScene(from, to, n) {
+    document.getElementById(from).style.display = 'none';
+    document.getElementById(to).style.display = 'flex';
+    setDot(n);
+  }
+
+  function runScene1() {
+    setDot(1);
+    const chat = document.getElementById('dpChat');
+    chat.innerHTML = '';
+    addMsg(chat, 'ai', 'Hello! Let\'s practice English today. Tell me about your weekend.', 400);
+    typeInto(document.getElementById('dpInput'), 'I goed to the park with my friends!', 1600, 55);
+    addMsg(chat, 'user', 'I goed to the park with my friends!', 3400);
+    t(() => { document.getElementById('dpInput').innerHTML = '<span class="dp-input-cursor"></span>'; }, 3500);
+    addMsg(chat, 'ai', '⏳ Checking grammar...', 4000);
+    t(() => {
+      const msgs = chat.querySelectorAll('.dp-msg');
+      msgs[msgs.length-1].remove();
+    }, 5200);
+    addMsg(chat, 'correction', '✏️ "goed" ✗  →  "went" ✅  |  "go" is an irregular verb — past tense is "went"', 5300);
+    addMsg(chat, 'ai', 'Almost perfect! Your sentence structure is great. Just one fix: "go" is irregular, so the past tense is "went" not "goed".', 6200);
+    typeInto(document.getElementById('dpInput'), 'Thanks! Can you teach me some vocabulary?', 7200, 50);
+    addMsg(chat, 'user', 'Thanks! Can you teach me some vocabulary?', 9500);
+    t(() => { document.getElementById('dpInput').innerHTML = '<span class="dp-input-cursor"></span>'; }, 9600);
+    t(() => switchScene('screen1','screen2',2), 11000);
+    t(runScene2, 11100);
+  }
+
+  function runScene2() {
+    const txt = document.getElementById('dpGramText');
+    const res = document.getElementById('dpGramResult');
+    res.style.opacity = '0';
+    txt.textContent = '';
+    const sentence = 'I have went to the store yesterday and buyed some groceries for my family.';
+    let i = 0;
+    const iv = setInterval(() => {
+      if (i < sentence.length) { txt.textContent = sentence.slice(0, ++i); }
+      else { clearInterval(iv); }
+    }, 35);
+    t(() => { res.style.opacity = '1'; }, 2800);
+    t(() => switchScene('screen2','screen3',3), 6000);
+    t(runScene3, 6100);
+  }
+
+  function runScene3() {
+    document.getElementById('dpXP').style.opacity = '0';
+    document.querySelectorAll('.dp-rbar-fill').forEach(el => { el.style.width = '0'; });
+    t(() => {
+      document.querySelectorAll('.dp-rbar-fill').forEach(el => {
+        el.style.width = el.dataset.w + '%';
+      });
+    }, 400);
+    t(() => { document.getElementById('dpXP').style.opacity = '1'; }, 2200);
+    t(() => switchScene('screen3','screen4',4), 5000);
+    t(runScene4, 5100);
+  }
+
+  function runScene4() {
+    document.getElementById('dpCardBack').style.display = 'none';
+    document.getElementById('dpCardFront').style.display = 'block';
+    document.getElementById('dpCardBtns').style.opacity = '0';
+    t(() => {
+      document.getElementById('dpCardFront').style.display = 'none';
+      document.getElementById('dpCardBack').style.display = 'block';
+    }, 2000);
+    t(() => { document.getElementById('dpCardBtns').style.opacity = '1'; }, 2600);
+    // Loop back to scene 1 after a pause
+    t(() => switchScene('screen4','screen1',1), 6500);
+    t(() => {
+      document.getElementById('dpChat').innerHTML = '';
+      document.getElementById('dpInput').innerHTML = '<span class="dp-input-cursor"></span>';
+      runScene1();
+    }, 6600);
+  }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    const bt = document.getElementById('backTop');
+    if (window.scrollY > 50) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+    if (window.scrollY > 400) bt.classList.add('visible'); else bt.classList.remove('visible');
+  });
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+  revealEls.forEach(el => obs.observe(el));
+  const counters = document.querySelectorAll('[data-target]');
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target; const target = parseInt(el.dataset.target); const suffix = el.dataset.suffix || '';
+        let cur = 0; const step = Math.ceil(target / 40);
+        const t = setInterval(() => { cur = Math.min(cur + step, target); el.textContent = cur + suffix; if (cur >= target) clearInterval(t); }, 40);
+        countObs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(el => countObs.observe(el));
+  function toggleFaq(btn) {
+    const item = btn.parentElement; const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+  function handleWaitlist(e) {
+    e.preventDefault();
+    document.getElementById('waitlistFormWrap').style.display = 'none';
+    document.getElementById('waitlistSuccess').style.display = 'block';
+  }
+</script>
+</body>
+</html>

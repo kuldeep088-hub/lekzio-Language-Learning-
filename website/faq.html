@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lekzio — FAQ</title>
+  <meta name="description" content="Frequently asked questions about Lekzio — pricing, features, language support, AI technology, and getting started." />
+  <meta property="og:title" content="Lekzio — FAQ" />
+  <meta property="og:description" content="Frequently asked questions about Lekzio — pricing, features, language support, AI technology, and getting started." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#050810;--bg-2:#080d1a;--surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.08);--border-glow:rgba(139,92,246,0.35);--purple:#8b5cf6;--purple-light:#a78bfa;--purple-dim:rgba(139,92,246,0.15);--cyan:#06b6d4;--text:#e2e8f0;--text-muted:#64748b;--text-dim:#94a3b8;--gold:#f59e0b;--green:#10b981;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(5,8,16,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background 0.3s;}
+    nav.scrolled{background:rgba(5,8,16,0.97);}
+    .nav-logo a{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);text-decoration:none;}
+    .nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+    .nav-links a{color:var(--text-dim);text-decoration:none;font-size:0.875rem;font-weight:500;padding:0.4rem 0.75rem;border-radius:6px;transition:color 0.2s,background 0.2s;}
+    .nav-links a:hover{color:var(--text);background:var(--surface-hover);}
+    .nav-links a.active{color:var(--purple-light);}
+    .nav-cta{background:var(--purple)!important;color:#fff!important;padding:0.45rem 1rem!important;border-radius:8px!important;font-weight:600!important;}
+    .hamburger{display:none;background:none;border:1px solid var(--border);color:var(--text);font-size:1.2rem;padding:0.5rem 0.75rem;border-radius:6px;cursor:pointer;min-width:44px;min-height:44px;align-items:center;justify-content:center;}
+    @media(max-width:900px){.nav-links{display:none;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--bg-2);padding:1rem;border-bottom:1px solid var(--border);gap:0.25rem;max-height:calc(100vh - 64px);overflow-y:auto;}.nav-links.open{display:flex;}.hamburger{display:block;}.nav-links a{padding:0.65rem 1rem;font-size:1rem;}.nav-links .nav-cta{text-align:center;margin-top:0.25rem;}}
+    @media(max-width:600px){nav{padding:0 1rem;}}
+    section{position:relative;z-index:1;}
+    .container{max-width:900px;margin:0 auto;padding:0 1.5rem;}
+    .page-hero{padding:clamp(5rem,12vw,8rem) 1.5rem clamp(2rem,4vw,3rem);text-align:center;position:relative;}
+    .page-hero::before{content:'';position:absolute;top:30%;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(139,92,246,0.12) 0%,transparent 70%);pointer-events:none;}
+    .section-badge{display:inline-block;background:var(--purple-dim);border:1px solid var(--border-glow);border-radius:100px;padding:0.25rem 0.8rem;font-size:0.78rem;font-family:'JetBrains Mono',monospace;color:var(--purple-light);margin-bottom:0.75rem;letter-spacing:0.05em;}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;margin-bottom:0.75rem;letter-spacing:-0.02em;}
+    .section-sub{color:var(--text-dim);font-size:1rem;max-width:550px;margin:0 auto;}
+    .faq-page{padding:3rem 0 5rem;}
+    .faq-category{margin-bottom:3rem;}
+    .faq-cat-title{display:flex;align-items:center;gap:0.75rem;font-size:0.78rem;font-weight:700;color:var(--purple-light);letter-spacing:0.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);}
+    .faq-cat-icon{font-size:1rem;}
+    .faq-item{border:1px solid var(--border);border-radius:10px;margin-bottom:0.6rem;overflow:hidden;}
+    .faq-q{width:100%;background:var(--surface);border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;padding:1rem 1.25rem;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:background 0.2s;}
+    .faq-q:hover{background:var(--surface-hover);}
+    .faq-chevron{transition:transform 0.3s;font-size:0.8rem;color:var(--text-muted);flex-shrink:0;}
+    .faq-item.open .faq-chevron{transform:rotate(180deg);}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.3s;padding:0 1.25rem;color:var(--text-dim);font-size:0.9rem;line-height:1.7;background:var(--bg-2);}
+    .faq-item.open .faq-a{max-height:1000px;padding:1rem 1.25rem;}
+    .cta-section{padding:5rem 0;text-align:center;background:var(--bg-2);border-top:1px solid var(--border);}
+    .cta-section h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.2rem);font-weight:700;margin-bottom:0.75rem;}
+    .cta-section p{color:var(--text-dim);max-width:420px;margin:0 auto 2rem;font-size:0.95rem;}
+    .btn-primary{background:linear-gradient(135deg,var(--purple),#6d28d9);color:#fff;padding:0.85rem 2rem;border-radius:10px;font-weight:600;font-size:1rem;text-decoration:none;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 0 30px rgba(139,92,246,0.3);display:inline-block;}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(139,92,246,0.5);}
+    .btn-secondary{background:var(--surface);color:var(--text);padding:0.85rem 2rem;border-radius:10px;font-weight:600;font-size:1rem;text-decoration:none;border:1px solid var(--border);cursor:pointer;transition:background 0.2s,border-color 0.2s;display:inline-block;margin-left:0.75rem;}
+    .btn-secondary:hover{background:var(--surface-hover);border-color:var(--purple);}
+    footer{background:var(--bg-2);border-top:1px solid var(--border);padding:3rem 0 1.5rem;}
+    .footer-inner{display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+    @media(max-width:768px){.footer-inner{grid-template-columns:1fr;gap:2rem;}}
+    .footer-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text);text-decoration:none;display:block;margin-bottom:0.5rem;}
+    .footer-copy{color:var(--text-muted);font-size:0.82rem;}
+    .footer-dev{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:100px;padding:0.2rem 0.7rem;font-size:0.75rem;color:var(--gold);margin-top:0.5rem;}
+    .footer-links{display:flex;flex-wrap:wrap;gap:1.5rem;}
+    .footer-col h4{font-size:0.8rem;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;}
+    .footer-col a{display:block;color:var(--text-dim);text-decoration:none;font-size:0.875rem;margin-bottom:0.4rem;transition:color 0.2s;}
+    .footer-col a:hover{color:var(--purple-light);}
+    .footer-social{display:flex;gap:0.75rem;margin-top:1rem;}
+    .social-btn{width:44px;height:44px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;transition:border-color 0.2s,background 0.2s;}
+    .social-btn:hover{border-color:var(--purple);background:var(--purple-dim);}
+    .footer-bottom{border-top:1px solid var(--border);margin-top:2rem;padding-top:1.25rem;text-align:center;color:var(--text-muted);font-size:0.8rem;}
+    .back-top{position:fixed;bottom:1.5rem;right:1rem;width:44px;height:44px;background:var(--purple);border:none;border-radius:10px;color:#fff;font-size:1.1rem;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.3s;z-index:100;display:flex;align-items:center;justify-content:center;}
+    @media(min-width:600px){.back-top{bottom:2rem;right:2rem;}}
+    .back-top.visible{opacity:1;pointer-events:auto;}
+    .back-top:hover{transform:translateY(-3px);}
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+  </style>
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-logo"><a href="index.html">🗣 Lekzio</a></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="faq.html" class="active">FAQ</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html" class="nav-cta">Get Started →</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleNav()">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div style="position:relative;z-index:1;">
+    <div class="section-badge">FAQ</div>
+    <h1 class="section-title" style="font-size:clamp(2.2rem,5vw,4rem);">Frequently Asked Questions</h1>
+    <p class="section-sub">Everything you need to know about Lekzio. Can not find your answer? <a href="contact.html" style="color:var(--purple-light);text-decoration:none;">Contact us →</a></p>
+  </div>
+</section>
+
+<section class="faq-page">
+  <div class="container">
+
+    <!-- GENERAL -->
+    <div class="faq-category reveal">
+      <div class="faq-cat-title"><span class="faq-cat-icon">💬</span>General</div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">When will Lekzio launch?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio is fully live! You can sign up for free right now at register.html and start using all 30+ AI learning tools immediately. No credit card required.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What is Lekzio?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio is a full-stack language learning application powered by Anthropic's Claude AI. It offers 30+ AI-powered features including real-time conversation, grammar checking, vocabulary flashcards with spaced repetition, lesson generation, interactive stories, role play simulations, shadowing mode, skill radar analytics, CEFR testing, and more — all personalized to your CEFR level and learning goals.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is Lekzio free to use?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Yes. Lekzio has a permanent free plan that gives you access to 5 core features, 50 messages per day, and 1 language — forever, with no credit card required. The Pro plan ($12/mo) unlocks all 30+ features, unlimited messages, and all 10+ languages.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How is Lekzio different from Duolingo?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio uses a real Claude AI for genuine, adaptive conversations — not pre-scripted responses or decision trees. Every lesson, grammar correction, and story is generated fresh by Claude specifically for you. There is no shallow gamification layer. Lekzio is built around real linguistics research — CEFR levels, SM-2 spaced repetition, IPA phonetics, and register analysis — not engagement metrics.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Who is Lekzio for?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio is for anyone who wants to learn a language seriously — from complete beginners to near-native speakers looking to polish their skills. It is especially well-suited for learners who are frustrated by the limitations of gamified apps and want real, intelligent feedback from an AI that understands language at a deep level.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What devices does Lekzio support?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio is a web application that works on any modern browser — desktop, tablet, or mobile. We are building a mobile-responsive React frontend, so it will work well on your phone without needing a dedicated app. Native iOS and Android apps are planned for a future release.</div>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="faq-category reveal">
+      <div class="faq-cat-title"><span class="faq-cat-icon">⚡</span>Features</div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How does the AI Conversation work?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">The AI Conversation feature uses Claude to simulate a native speaker conversation partner calibrated to your exact CEFR level. Responses stream in real-time via Server-Sent Events (SSE) so they appear character by character, just like a real chat. You choose your correction mode: Gentle (corrections at the end), Strict (inline during the conversation), or Silent (full immersion). You can also select from 20+ topic categories.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What languages are supported?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio supports Spanish, French, German, Italian, Japanese, Mandarin Chinese, Portuguese, and Arabic at launch. These eight languages cover the most commonly studied languages worldwide. Additional languages are planned for future updates based on user demand. Sign up and let us know what language you want to see added next.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How does the Pronunciation Coach work?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">The Pronunciation Coach uses your browser's built-in microphone — no plugins or downloads required. You record yourself saying a target phrase, and the AI compares your pronunciation against native speaker patterns. You receive an IPA-based breakdown showing which phonemes were correct, close, or off, along with specific tips for each sound you need to improve.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What is Story Mode?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Interactive Story Mode puts you inside branching narratives written entirely in your target language. Choose from 5 genres: Adventure, Mystery, Romance, Sci-Fi, and Historical Fiction. At key decision points in the story, you choose what happens next — and the story branches accordingly. Vocabulary is calibrated to your CEFR level. Tap any word to see its translation without leaving the story.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How does spaced repetition work in Lekzio?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio uses the SM-2 algorithm — the same algorithm used in Anki, the world's most popular spaced repetition tool. After each flashcard review, you rate how well you remembered the word. SM-2 uses this rating to calculate exactly when you should see that word again: soon if you struggled, much later if you knew it well. This ensures you review words at the optimal moment to maximize long-term retention with minimum study time.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What are Daily Challenges?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Daily Challenges are five short exercises that refresh every 24 hours: Spot the Error (find grammar mistakes in a passage), Word of the Day (learn a new word in context), Translation Sprint (translate 10 phrases against a timer), Dialogue Completion (fill in the missing lines of a conversation), and Synonym Chain (find 5 synonyms with nuance differences). Completing all five earns your daily XP bonus and extends your learning streak.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What is Shadowing Mode?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Shadowing is an elite language learning technique used by polyglots worldwide. In Lekzio's Shadowing Mode, the AI speaks a sentence and you repeat it. Our AI then analyzes your timing, rhythm, and intonation and gives you a detailed score with specific phonetic tips.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How does the Skill Radar Chart work?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">After each session, Lekzio measures your performance across 6 dimensions: Reading, Writing, Speaking, Listening, Vocabulary, and Grammar. These scores update your personal Skill Radar Chart — a hexagonal visual map that instantly shows your strengths and areas to improve.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What is the CEFR Level Test?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">The CEFR Level Test is a formal 20-question adaptive assessment that covers all skill areas and places you accurately on the A1 to C2 scale. You can take it at any time to measure your progress. Upon completion, you receive a detailed score breakdown and a downloadable digital Level Certificate.</div>
+      </div>
+    </div>
+
+    <!-- PRICING & ACCOUNT -->
+    <div class="faq-category reveal">
+      <div class="faq-cat-title"><span class="faq-cat-icon">💳</span>Pricing &amp; Account</div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is the free plan really free forever?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Yes. The Free plan gives you 5 core features, 50 messages per day, and 1 language — forever. No credit card required. No expiry. There are no trials or hidden limits that kick in after 30 days. You can use the Free plan indefinitely and upgrade to Pro anytime you choose.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">When does billing start?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">You can start with a Free plan at no cost — no credit card required. If you upgrade to Pro, billing begins when your trial ends. The first 500 users receive 3 months of Pro completely free.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Yes. There are no long-term contracts or cancellation fees. Cancel your Pro or Team subscription at any time and your account reverts to the Free plan at the end of your current billing period. Your progress and flashcard decks are preserved on the Free plan.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is there a student discount?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">We offer a verified student discount of 50% off the Pro plan. Sign up and contact our support team with proof of enrollment to activate your discount.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What payment methods will be accepted?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">We plan to accept all major credit and debit cards (Visa, Mastercard, American Express), PayPal, Apple Pay, and Google Pay. Additional payment methods may be available depending on your region at launch.</div>
+      </div>
+    </div>
+
+    <!-- TECHNICAL -->
+    <div class="faq-category reveal">
+      <div class="faq-cat-title"><span class="faq-cat-icon">🔧</span>Technical</div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Do I need any special hardware?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">No. Lekzio is a web application that runs in any modern browser — Chrome, Firefox, Safari, Edge. The only exception is the Pronunciation Coach feature, which uses your device's built-in microphone (standard in all laptops, tablets, and smartphones). No downloads, plugins, or special hardware are required.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How is my data stored and protected?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">User data including progress, vocabulary decks, XP history, and settings is stored in a secure database. We do not sell your data to third parties. Conversation content is processed by the Claude AI API and is subject to Anthropic's data handling policies. We will publish a full privacy policy at launch with complete details on data retention and deletion.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is Lekzio mobile-friendly?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Yes. Lekzio is built with a fully responsive design that works well on mobile browsers. You can use it on your phone or tablet without any degradation in experience. Native iOS and Android apps are on the post-launch roadmap for an even better mobile experience.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What AI powers Lekzio?<span class="faq-chevron">▼</span></button>
+        <div class="faq-a">Lekzio is powered by Anthropic's Claude AI — one of the most capable large language models available. Claude was specifically chosen for its strong multilingual capabilities, nuanced understanding of grammar and linguistics, ability to maintain consistent personas, and its safe and honest approach to feedback. All 30+ features use Claude via the Anthropic API.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="reveal">
+      <h2>Still have questions?</h2>
+      <p>Our team is happy to help. Reach out via the contact page or join the Discord community.</p>
+      <a href="contact.html" class="btn-primary">Contact Us →</a>
+      <a href="register.html" class="btn-secondary">Get Started</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container" style="max-width:1100px;padding:0 1.5rem;">
+    <div class="footer-inner">
+      <div>
+        <a href="index.html" class="footer-logo">🗣 Lekzio</a>
+        <p class="footer-copy">© 2026 Lekzio. All rights reserved.</p>
+        <span class="footer-dev" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);color:var(--green);">🟢 Live &amp; fully operational</span>
+        <div class="footer-social">
+          <a href="#" class="social-btn">🐦</a>
+          <a href="#" class="social-btn">🐙</a>
+          <a href="#" class="social-btn">💬</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <a href="index.html">Home</a>
+          <a href="features.html">Features</a>
+          
+          <a href="about.html">About</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="faq.html">FAQ</a>
+          <a href="contact.html">Contact</a>
+          <a href="login.html">Login</a>
+          <a href="register.html">Get Started</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">Lekzio is currently in development</div>
+  </div>
+</footer>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+  function toggleNav(){document.getElementById('navLinks').classList.toggle('open');}
+  window.addEventListener('scroll',()=>{
+    if(window.scrollY>50)document.getElementById('navbar').classList.add('scrolled');else document.getElementById('navbar').classList.remove('scrolled');
+    if(window.scrollY>400)document.getElementById('backTop').classList.add('visible');else document.getElementById('backTop').classList.remove('visible');
+  });
+  const obs=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  function toggleFaq(btn){
+    const item=btn.parentElement;
+    const isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!isOpen)item.classList.add('open');
+  }
+</script>
+</body>
+</html>

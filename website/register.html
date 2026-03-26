@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lekzio — Create Your Free Account</title>
+  <meta name="description" content="Create your free Lekzio account and start learning any language with AI today. No credit card needed." />
+  <meta property="og:title" content="Lekzio — Get Started Free" />
+  <meta property="og:description" content="Create your free Lekzio account and start learning any language with AI today. No credit card needed." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#050810;--bg-2:#080d1a;--surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.08);--border-glow:rgba(139,92,246,0.35);--purple:#8b5cf6;--purple-light:#a78bfa;--purple-dim:rgba(139,92,246,0.15);--cyan:#06b6d4;--cyan-dim:rgba(6,182,212,0.12);--text:#e2e8f0;--text-muted:#64748b;--text-dim:#94a3b8;--gold:#f59e0b;--green:#10b981;--pink:#ec4899;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;min-height:100vh;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(5,8,16,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .nav-logo a{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);text-decoration:none;}
+    .nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+    .nav-links a{color:var(--text-dim);text-decoration:none;font-size:0.875rem;font-weight:500;padding:0.4rem 0.75rem;border-radius:6px;transition:color 0.2s,background 0.2s;}
+    .nav-links a:hover{color:var(--text);background:var(--surface-hover);}
+    .nav-links a.active{color:var(--purple-light);}
+    .nav-cta{background:var(--purple)!important;color:#fff!important;padding:0.45rem 1rem!important;border-radius:8px!important;font-weight:600!important;}
+    .hamburger{display:none;background:none;border:1px solid var(--border);color:var(--text);font-size:1.2rem;padding:0.5rem 0.75rem;border-radius:6px;cursor:pointer;min-width:44px;min-height:44px;align-items:center;justify-content:center;}
+    @media(max-width:900px){.nav-links{display:none;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--bg-2);padding:1rem;border-bottom:1px solid var(--border);gap:0.25rem;max-height:calc(100vh - 64px);overflow-y:auto;}.nav-links.open{display:flex;}.hamburger{display:block;}.nav-links a{padding:0.65rem 1rem;font-size:1rem;}.nav-links .nav-cta{text-align:center;margin-top:0.25rem;}}
+    @media(max-width:600px){nav{padding:0 1rem;}}
+    .page-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;padding-top:64px;}
+    @media(max-width:900px){.page-wrap{grid-template-columns:1fr;}}
+    .left-panel{background:linear-gradient(160deg,rgba(139,92,246,0.2) 0%,rgba(5,8,16,0.95) 60%),var(--bg-2);border-right:1px solid var(--border);padding:4rem 3rem;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+    .left-panel::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.15) 0%,transparent 70%);pointer-events:none;}
+    @media(max-width:900px){.left-panel{display:none;}}
+    .waitlist-count{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:100px;padding:0.3rem 0.9rem;font-size:0.82rem;color:var(--green);font-family:'JetBrains Mono',monospace;margin-bottom:2rem;}
+    .left-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:700;margin-bottom:0.75rem;letter-spacing:-0.02em;}
+    .left-sub{color:var(--text-dim);font-size:1rem;margin-bottom:2.5rem;line-height:1.6;}
+    .benefit-list{list-style:none;margin-bottom:2.5rem;}
+    .benefit-list li{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;font-size:0.9rem;border-bottom:1px solid var(--border);}
+    .benefit-list li:last-child{border-bottom:none;}
+    .benefit-check{width:22px;height:22px;border-radius:50%;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:0.7rem;flex-shrink:0;}
+    .trust-note{color:var(--text-muted);font-size:0.8rem;font-family:'JetBrains Mono',monospace;}
+    .right-panel{padding:4rem 3rem;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;}
+    @media(max-width:900px){.right-panel{padding:3rem 1.5rem;}}
+    @media(max-width:480px){.right-panel{padding:2rem 1rem;}}
+    .form-title{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;margin-bottom:0.35rem;}
+    .form-sub{color:var(--text-muted);font-size:0.875rem;margin-bottom:2rem;}
+    .form-group{margin-bottom:1rem;}
+    .form-label{display:block;font-size:0.82rem;font-weight:600;color:var(--text-dim);margin-bottom:0.4rem;letter-spacing:0.03em;}
+    .form-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.875rem 1rem;min-height:48px;color:var(--text);font-size:0.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s,background 0.2s;}
+    .form-input:focus{border-color:var(--purple);background:var(--surface-hover);}
+    .form-input::placeholder{color:var(--text-muted);}
+    select.form-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;}
+    select.form-input option{background:#0d1226;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    @media(max-width:640px){.form-row{grid-template-columns:1fr;}}
+    .btn-submit{width:100%;background:linear-gradient(135deg,var(--purple),#6d28d9);color:#fff;padding:0.9rem;border-radius:10px;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 0 30px rgba(139,92,246,0.3);margin-top:0.5rem;}
+    .btn-submit:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(139,92,246,0.5);}
+    .form-footer{text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-muted);}
+    .form-footer a{color:var(--purple-light);text-decoration:none;}
+    .form-footer a:hover{text-decoration:underline;}
+    .success-state{display:none;text-align:center;padding:3rem 2rem;}
+    .success-emoji{font-size:3rem;margin-bottom:1rem;display:block;}
+    .success-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:0.75rem;color:var(--green);}
+    .success-sub{color:var(--text-dim);margin-bottom:1.5rem;line-height:1.6;}
+    .success-detail{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:left;margin-bottom:1.5rem;}
+    .success-detail-row{display:flex;justify-content:space-between;padding:0.4rem 0;font-size:0.875rem;border-bottom:1px solid var(--border);}
+    .success-detail-row:last-child{border-bottom:none;}
+    .success-detail-label{color:var(--text-muted);}
+    .success-detail-value{color:var(--text);font-weight:500;}
+    .no-spam{color:var(--text-muted);font-size:0.8rem;font-family:'JetBrains Mono',monospace;}
+    footer{background:var(--bg-2);border-top:1px solid var(--border);padding:2rem 0;position:relative;z-index:1;}
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .footer-logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);text-decoration:none;}
+    .footer-copy{color:var(--text-muted);font-size:0.8rem;}
+    .footer-dev{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:100px;padding:0.2rem 0.7rem;font-size:0.75rem;color:var(--gold);}
+    .footer-links-row{display:flex;gap:1.25rem;flex-wrap:wrap;}
+    .footer-links-row a{color:var(--text-dim);text-decoration:none;font-size:0.82rem;transition:color 0.2s;}
+    .footer-links-row a:hover{color:var(--purple-light);}
+    .container{max-width:1100px;margin:0 auto;padding:0 1.5rem;}
+  </style>
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-logo"><a href="index.html">🗣 Lekzio</a></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html" class="nav-cta active">Get Started →</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleNav()">☰</button>
+</nav>
+
+<div class="page-wrap">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="waitlist-count" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);">🟢 Free during early access — no credit card needed</div>
+    <h1 class="left-title">Start Learning for Free</h1>
+    <p class="left-sub">Join thousands of learners already mastering languages with AI. Get instant access to 30+ advanced AI tools — no credit card required.</p>
+    <ul class="benefit-list">
+      <li><span class="benefit-check">✓</span>Instant access — start learning in 60 seconds</li>
+      <li><span class="benefit-check">✓</span>First 500 users get 3 months Pro free ($36 value)</li>
+      <li><span class="benefit-check">✓</span>30+ AI-powered language learning tools</li>
+      <li><span class="benefit-check">✓</span>Founding member badge on your profile</li>
+      <li><span class="benefit-check">✓</span>Priority support forever</li>
+    </ul>
+    <p class="trust-note">// No credit card required · No spam · Unsubscribe anytime</p>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div id="formWrap">
+      <h2 class="form-title">Create Your Account</h2>
+      <p class="form-sub">Takes 60 seconds. Your spot is reserved instantly.</p>
+      <form id="waitlistForm" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="fullName">Full Name</label>
+          <input class="form-input" type="text" id="fullName" name="fullName" placeholder="Jane Smith" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="jane@example.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password</label>
+          <input class="form-input" type="password" id="regPassword" name="regPassword" placeholder="Create a password" required minlength="6" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="language">Target Language</label>
+            <select class="form-input" id="language" name="language" required>
+              <option value="" disabled selected>Choose language</option>
+              <option>English</option>
+              <option>Hindi</option>
+              <option>Spanish</option>
+              <option>French</option>
+              <option>German</option>
+              <option>Italian</option>
+              <option>Japanese</option>
+              <option>Mandarin</option>
+              <option>Portuguese</option>
+              <option>Arabic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="level">Current Level</label>
+            <select class="form-input" id="level" name="level" required>
+              <option value="" disabled selected>Choose level</option>
+              <option>Complete Beginner</option>
+              <option>A1 — Beginner</option>
+              <option>A2 — Elementary</option>
+              <option>B1 — Intermediate</option>
+              <option>B2 — Upper Intermediate</option>
+              <option>C1 — Advanced</option>
+              <option>C2 — Mastery</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="goal">Learning Goal</label>
+            <select class="form-input" id="goal" name="goal" required>
+              <option value="" disabled selected>Choose goal</option>
+              <option>Travel</option>
+              <option>Business</option>
+              <option>Academic</option>
+              <option>Personal Enrichment</option>
+              <option>Heritage Language</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="source">How did you hear about us?</label>
+            <select class="form-input" id="source" name="source">
+              <option value="" disabled selected>Choose source</option>
+              <option>Social Media</option>
+              <option>Friend / Referral</option>
+              <option>Google Search</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">Create Free Account →</button>
+        <div class="form-footer">
+          Already have an account? <a href="login.html">Log in</a><br />
+          <span style="margin-top:0.35rem;display:block;">No credit card required. No spam. Unsubscribe anytime.</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="success-state" id="successState">
+      <span class="success-emoji">🎉</span>
+      <div class="success-title">Account Created!</div>
+      <p class="success-sub">Welcome to Lekzio! Your account is ready. You now have access to all AI learning tools — start your first lesson now.</p>
+      <div class="success-detail">
+        <div class="success-detail-row"><span class="success-detail-label">Name</span><span class="success-detail-value" id="s-name">—</span></div>
+        <div class="success-detail-row"><span class="success-detail-label">Email</span><span class="success-detail-value" id="s-email">—</span></div>
+        <div class="success-detail-row"><span class="success-detail-label">Language</span><span class="success-detail-value" id="s-language">—</span></div>
+        <div class="success-detail-row"><span class="success-detail-label">Goal</span><span class="success-detail-value" id="s-goal">—</span></div>
+        <div class="success-detail-row"><span class="success-detail-label">Pro months free</span><span class="success-detail-value" style="color:var(--green);">3 months ($36 value)</span></div>
+      </div>
+      <p class="no-spam">// No spam. Unsubscribe anytime. Promise.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <a href="index.html" class="footer-logo">🗣 Lekzio</a><br />
+        <span class="footer-copy">© 2026 Lekzio. All rights reserved.</span>
+      </div>
+      <span class="footer-dev" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);color:var(--green);">🟢 Live &amp; fully operational</span>
+      <div class="footer-links-row">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleNav(){document.getElementById('navLinks').classList.toggle('open');}
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('regPassword') ? document.getElementById('regPassword').value : 'langai2026';
+    const language = document.getElementById('language').value || 'English';
+    const level = document.getElementById('level').value || 'B1';
+    const goal = document.getElementById('goal').value || 'General';
+
+    // Build user object
+    const newUser = {
+      name, email, password, language, level, goal,
+      xp: 0, streak: 0, lastActive: new Date().toDateString(),
+      lessonsCompleted: 0, wordsLearned: 0,
+      skills: {speaking:0, grammar:0, vocabulary:0, listening:0, reading:0, writing:0},
+      achievements: [], flashcards: [],
+      challengesCompleted: {date:'', count:0, done:[]},
+      joinedAt: new Date().toISOString()
+    };
+
+    // Save to users list
+    const users = JSON.parse(localStorage.getItem('langai_users') || '[]');
+    const existing = users.findIndex(u => u.email === email);
+    if (existing >= 0) users[existing] = newUser;
+    else users.push(newUser);
+    localStorage.setItem('langai_users', JSON.stringify(users));
+
+    // Set as current user
+    localStorage.setItem('langai_user', JSON.stringify(newUser));
+
+    // Show success then redirect
+    document.getElementById('s-name').textContent = name;
+    document.getElementById('s-email').textContent = email;
+    document.getElementById('s-language').textContent = language;
+    document.getElementById('s-goal').textContent = goal;
+    document.getElementById('formWrap').style.display = 'none';
+    const ss = document.getElementById('successState');
+    ss.style.display = 'block';
+
+    setTimeout(() => { window.location.href = 'app.html'; }, 2000);
+  }
+</script>
+</body>
+</html>

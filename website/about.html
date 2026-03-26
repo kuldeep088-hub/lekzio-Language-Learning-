@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lekzio — About Us</title>
+  <meta name="description" content="Learn about Lekzio — our mission to make language learning effective, natural, and accessible through the power of AI." />
+  <meta property="og:title" content="Lekzio — About Us" />
+  <meta property="og:description" content="Learn about Lekzio — our mission to make language learning effective, natural, and accessible through the power of AI." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#050810;--bg-2:#080d1a;--surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.08);--border-glow:rgba(139,92,246,0.35);--purple:#8b5cf6;--purple-light:#a78bfa;--purple-dim:rgba(139,92,246,0.15);--cyan:#06b6d4;--cyan-dim:rgba(6,182,212,0.12);--text:#e2e8f0;--text-muted:#64748b;--text-dim:#94a3b8;--gold:#f59e0b;--green:#10b981;--pink:#ec4899;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(5,8,16,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background 0.3s;}
+    nav.scrolled{background:rgba(5,8,16,0.97);}
+    .nav-logo a{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);text-decoration:none;}
+    .nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+    .nav-links a{color:var(--text-dim);text-decoration:none;font-size:0.875rem;font-weight:500;padding:0.4rem 0.75rem;border-radius:6px;transition:color 0.2s,background 0.2s;}
+    .nav-links a:hover{color:var(--text);background:var(--surface-hover);}
+    .nav-links a.active{color:var(--purple-light);}
+    .nav-cta{background:var(--purple)!important;color:#fff!important;padding:0.45rem 1rem!important;border-radius:8px!important;font-weight:600!important;}
+    .hamburger{display:none;background:none;border:1px solid var(--border);color:var(--text);font-size:1.2rem;padding:0.5rem 0.75rem;border-radius:6px;cursor:pointer;min-width:44px;min-height:44px;align-items:center;justify-content:center;}
+    @media(max-width:900px){.nav-links{display:none;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--bg-2);padding:1rem;border-bottom:1px solid var(--border);gap:0.25rem;max-height:calc(100vh - 64px);overflow-y:auto;}.nav-links.open{display:flex;}.hamburger{display:block;}.nav-links a{padding:0.65rem 1rem;font-size:1rem;}.nav-links .nav-cta{text-align:center;margin-top:0.25rem;}}
+    @media(max-width:600px){nav{padding:0 1rem;}}
+    section{position:relative;z-index:1;}
+    .container{max-width:1100px;margin:0 auto;padding:0 1.5rem;}
+    .container-narrow{max-width:780px;margin:0 auto;padding:0 1.5rem;}
+    .page-hero{padding:clamp(5rem,12vw,8rem) 1.5rem clamp(2rem,4vw,3rem);text-align:center;position:relative;}
+    .page-hero::before{content:'';position:absolute;top:30%;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(139,92,246,0.15) 0%,transparent 70%);pointer-events:none;}
+    .section-badge{display:inline-block;background:var(--purple-dim);border:1px solid var(--border-glow);border-radius:100px;padding:0.25rem 0.8rem;font-size:0.78rem;font-family:'JetBrains Mono',monospace;color:var(--purple-light);margin-bottom:0.75rem;letter-spacing:0.05em;}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;margin-bottom:0.75rem;letter-spacing:-0.02em;}
+    .section-sub{color:var(--text-dim);font-size:1rem;max-width:600px;margin:0 auto;}
+    .section-header{text-align:center;margin-bottom:3rem;}
+    .section-pad{padding:clamp(3rem,6vw,5rem) 0;}
+    .prose{color:var(--text-dim);font-size:1rem;line-height:1.8;margin-bottom:1.25rem;}
+    .prose strong{color:var(--text);font-weight:600;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+    @media(max-width:768px){.two-col{grid-template-columns:1fr;gap:1.5rem;}}
+    .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+    @media(max-width:768px){.tech-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:480px){.tech-grid{grid-template-columns:1fr;}}
+    .tech-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color 0.3s,background 0.3s;}
+    .tech-card:hover{border-color:var(--border-glow);background:var(--surface-hover);}
+    .tech-icon{font-size:1.5rem;margin-bottom:0.5rem;}
+    .tech-name{font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;}
+    .tech-desc{color:var(--text-muted);font-size:0.8rem;}
+    .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+    @media(max-width:700px){.team-grid{grid-template-columns:1fr;max-width:300px;margin:0 auto;}}
+    .team-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;text-align:center;transition:border-color 0.3s;}
+    .team-card:hover{border-color:var(--border-glow);}
+    .team-avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;margin:0 auto 1rem;}
+    .team-name{font-weight:600;font-size:1rem;margin-bottom:0.25rem;}
+    .team-role{color:var(--text-muted);font-size:0.82rem;font-family:'JetBrains Mono',monospace;}
+    .values-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+    @media(max-width:600px){.values-grid{grid-template-columns:1fr;}}
+    .value-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:border-color 0.3s;}
+    .value-card:hover{border-color:var(--border-glow);}
+    .value-icon{font-size:1.5rem;margin-bottom:0.5rem;}
+    .value-title{font-weight:700;font-size:1rem;margin-bottom:0.4rem;}
+    .value-desc{color:var(--text-dim);font-size:0.875rem;line-height:1.55;}
+    .timeline{position:relative;max-width:600px;margin:0 auto;}
+    .timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:var(--border);}
+    .tl-item{display:flex;gap:1.5rem;margin-bottom:2rem;position:relative;}
+    .tl-dot{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);background:var(--bg-2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;position:relative;z-index:1;}
+    .tl-dot.done{border-color:rgba(16,185,129,0.5);background:rgba(16,185,129,0.1);}
+    .tl-dot.active{border-color:rgba(245,158,11,0.5);background:rgba(245,158,11,0.1);}
+    .tl-content{padding-top:0.3rem;}
+    .tl-title{font-weight:600;margin-bottom:0.25rem;}
+    .tl-sub{color:var(--text-muted);font-size:0.85rem;}
+    .progress-bar-sm{height:6px;background:var(--surface);border-radius:100px;overflow:hidden;margin-top:0.4rem;border:1px solid var(--border);}
+    .progress-fill-sm{height:100%;background:linear-gradient(90deg,var(--gold),#f97316);border-radius:100px;transition:width 1.5s ease;}
+    .cta-section{padding:5rem 0;text-align:center;background:var(--bg-2);border-top:1px solid var(--border);}
+    .cta-section h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:700;margin-bottom:1rem;}
+    .cta-section p{color:var(--text-dim);max-width:450px;margin:0 auto 2rem;}
+    .btn-primary{background:linear-gradient(135deg,var(--purple),#6d28d9);color:#fff;padding:0.85rem 2rem;border-radius:10px;font-weight:600;font-size:1rem;text-decoration:none;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 0 30px rgba(139,92,246,0.3);display:inline-block;}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(139,92,246,0.5);}
+    footer{background:var(--bg-2);border-top:1px solid var(--border);padding:3rem 0 1.5rem;}
+    .footer-inner{display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+    @media(max-width:768px){.footer-inner{grid-template-columns:1fr;gap:2rem;}}
+    .footer-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text);text-decoration:none;display:block;margin-bottom:0.5rem;}
+    .footer-copy{color:var(--text-muted);font-size:0.82rem;}
+    .footer-dev{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:100px;padding:0.2rem 0.7rem;font-size:0.75rem;color:var(--gold);margin-top:0.5rem;}
+    .footer-links{display:flex;flex-wrap:wrap;gap:1.5rem;}
+    .footer-col h4{font-size:0.8rem;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;}
+    .footer-col a{display:block;color:var(--text-dim);text-decoration:none;font-size:0.875rem;margin-bottom:0.4rem;transition:color 0.2s;}
+    .footer-col a:hover{color:var(--purple-light);}
+    .footer-social{display:flex;gap:0.75rem;margin-top:1rem;}
+    .social-btn{width:44px;height:44px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;transition:border-color 0.2s,background 0.2s;}
+    .social-btn:hover{border-color:var(--purple);background:var(--purple-dim);}
+    .footer-bottom{border-top:1px solid var(--border);margin-top:2rem;padding-top:1.25rem;text-align:center;color:var(--text-muted);font-size:0.8rem;}
+    .back-top{position:fixed;bottom:1.5rem;right:1rem;width:44px;height:44px;background:var(--purple);border:none;border-radius:10px;color:#fff;font-size:1.1rem;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.3s;z-index:100;display:flex;align-items:center;justify-content:center;}
+    @media(min-width:600px){.back-top{bottom:2rem;right:2rem;}}
+    .back-top.visible{opacity:1;pointer-events:auto;}
+    .back-top:hover{transform:translateY(-3px);}
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .divider{border:none;border-top:1px solid var(--border);margin:4rem 0;}
+  </style>
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-logo"><a href="index.html">🗣 Lekzio</a></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="features.html">Features</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html" class="nav-cta">Get Started →</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleNav()">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div style="position:relative;z-index:1;">
+    <div class="section-badge">ABOUT LEKZIO</div>
+    <h1 class="section-title" style="font-size:clamp(2.2rem,5vw,4rem);">About Lekzio</h1>
+    <p class="section-sub">Built by language learners, powered by AI. We believe fluency should be accessible to everyone.</p>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="section-pad" style="padding-top:2rem;">
+  <div class="container-narrow">
+    <div class="section-header reveal">
+      <div class="section-badge">OUR MISSION</div>
+      <h2 class="section-title">Making Fluency Accessible to Everyone</h2>
+    </div>
+    <p class="prose reveal">Our mission is to make fluency accessible to everyone through the power of artificial intelligence. Language learning has historically been expensive, intimidating, and slow — gated behind classroom schedules, expensive tutors, and textbooks that go out of date the moment they are printed.</p>
+    <p class="prose reveal">We believe that <strong>everyone deserves a world-class language tutor</strong> — one that is available 24 hours a day, speaks to you at exactly your level, corrects you without judgment, and adapts to your unique learning style. That is what Lekzio is building: not a gamified distraction, but a genuine learning companion powered by Claude AI.</p>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- THE STORY -->
+<section class="section-pad" style="padding-top:2rem;">
+  <div class="container">
+    <div class="two-col">
+      <div class="reveal">
+        <div class="section-badge">THE STORY</div>
+        <h2 class="section-title">Why We Built Lekzio</h2>
+        <p class="prose">We were frustrated by the limitations of existing language apps. Pre-scripted lessons that never deviate. Gamification without depth. No real conversation — just tapping the right word at the right time. After years of trying Duolingo, Babbel, and expensive tutors, something was always missing: genuine, adaptive intelligence.</p>
+        <p class="prose">When Claude AI became available, the potential was immediately clear. Here was an AI that could hold a real conversation, explain grammar rules in plain language, generate fresh lessons on any topic, and correct with nuance and cultural awareness. We spent six months building Lekzio from scratch — a FastAPI backend, a carefully designed prompt architecture, and a feature set grounded in actual linguistics research.</p>
+        <p class="prose">Every feature in Lekzio exists because a language learner needed it. Not because it looked good in a product demo.</p>
+      </div>
+      <div class="reveal">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;">// The numbers behind Lekzio</div>
+          <div style="margin-bottom:1.25rem;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;"><span style="font-size:0.875rem;">Features built</span><span style="font-family:'Playfair Display',serif;color:var(--purple-light);font-weight:700;">30+</span></div>
+            <div style="height:4px;background:var(--surface);border-radius:100px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg,var(--purple),var(--purple-light));border-radius:100px;"></div></div>
+          </div>
+          <div style="margin-bottom:1.25rem;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;"><span style="font-size:0.875rem;">Months of development</span><span style="font-family:'Playfair Display',serif;color:var(--cyan);font-weight:700;">6</span></div>
+            <div style="height:4px;background:var(--surface);border-radius:100px;overflow:hidden;"><div style="width:60%;height:100%;background:linear-gradient(90deg,var(--cyan),#0891b2);border-radius:100px;"></div></div>
+          </div>
+          <div style="margin-bottom:1.25rem;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;"><span style="font-size:0.875rem;">Languages supported</span><span style="font-family:'Playfair Display',serif;color:var(--gold);font-weight:700;">8+</span></div>
+            <div style="height:4px;background:var(--surface);border-radius:100px;overflow:hidden;"><div style="width:40%;height:100%;background:linear-gradient(90deg,var(--gold),#f97316);border-radius:100px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;"><span style="font-size:0.875rem;">App completion</span><span style="font-family:'Playfair Display',serif;color:var(--green);font-weight:700;">100%</span></div>
+            <div style="height:4px;background:var(--surface);border-radius:100px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg,var(--green),#059669);border-radius:100px;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- TECH STACK -->
+<section class="section-pad" style="padding-top:2rem;background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">TECHNOLOGY</div>
+      <h2 class="section-title">Built on Solid Foundations</h2>
+      <p class="section-sub">A modern, scalable stack chosen for performance, reliability, and developer experience.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <div class="tech-icon">⚡</div>
+        <div class="tech-name">FastAPI</div>
+        <div class="tech-desc">High-performance Python backend with automatic OpenAPI docs and async support for SSE streaming.</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🧠</div>
+        <div class="tech-name">Claude AI</div>
+        <div class="tech-desc">Anthropic's Claude powers all 30+ AI features — conversation, grammar, lessons, stories, shadowing analysis, skill radar, CEFR testing, and more.</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">⚛️</div>
+        <div class="tech-name">React</div>
+        <div class="tech-desc">Modern component-based frontend with hooks, context, and real-time UI updates via SSE.</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🗄️</div>
+        <div class="tech-name">SQLite</div>
+        <div class="tech-desc">Lightweight relational database for user data, vocabulary decks, XP history, and progress tracking.</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">📡</div>
+        <div class="tech-name">SSE Streaming</div>
+        <div class="tech-desc">Server-Sent Events deliver Claude's responses token-by-token for a natural, real-time conversation feel.</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🧮</div>
+        <div class="tech-name">SM-2 Algorithm</div>
+        <div class="tech-desc">The scientifically-validated spaced repetition algorithm used in Anki, applied to vocabulary flashcards.</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">📊</div>
+        <div class="tech-name">Skill Radar Analytics</div>
+        <div class="tech-desc">Session-by-session proficiency tracking across 6 dimensions — Reading, Writing, Speaking, Listening, Vocabulary, and Grammar — rendered as an interactive radar chart.</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🧬</div>
+        <div class="tech-name">Ebbinghaus Forgetting Curve</div>
+        <div class="tech-desc">Memory science model that predicts when learners are about to forget vocabulary or grammar rules, proactively scheduling micro-reviews before knowledge degrades.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE TEAM -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">THE TEAM</div>
+      <h2 class="section-title">The People Behind Lekzio</h2>
+      <p class="section-sub">A small, passionate team of language learners and builders.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar" style="background:linear-gradient(135deg,var(--purple),#6d28d9)">AK</div>
+        <div class="team-name">Alex Kim</div>
+        <div class="team-role">Founder &amp; Lead Developer</div>
+        <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.75rem;line-height:1.5;">Polyglot (English, Korean, Spanish, French) and full-stack engineer. Built the FastAPI backend and Claude AI integration from scratch.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar" style="background:linear-gradient(135deg,var(--cyan),#0891b2)">MR</div>
+        <div class="team-name">Maya Rao</div>
+        <div class="team-role">AI / ML Engineer</div>
+        <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.75rem;line-height:1.5;">Prompt engineering specialist with a background in computational linguistics. Designed the grammar engine and CEFR calibration system.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar" style="background:linear-gradient(135deg,var(--pink),var(--purple))">JL</div>
+        <div class="team-name">Jake Liu</div>
+        <div class="team-role">UX Designer</div>
+        <p style="color:var(--text-dim);font-size:0.82rem;margin-top:0.75rem;line-height:1.5;">Interaction designer focused on making complex AI tools feel intuitive. Learner of Japanese and Mandarin himself — the perfect user tester.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- VALUES -->
+<section class="section-pad" style="padding-top:2rem;background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">OUR VALUES</div>
+      <h2 class="section-title">What We Stand For</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-icon">🎯</div>
+        <div class="value-title">Depth over Gamification</div>
+        <div class="value-desc">We do not believe in reducing language learning to streak notifications and cartoon owls. Real progress comes from deliberate practice, genuine conversation, and understanding grammar rules — not from collecting badges.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🤖</div>
+        <div class="value-title">Real AI, Not Scripted</div>
+        <div class="value-desc">Every response is generated fresh by Claude AI. There are no decision trees, no pre-written scripts, no if-then logic masquerading as intelligence. When you have a conversation with Lekzio, you are talking to actual AI.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">📈</div>
+        <div class="value-title">Adaptive Learning</div>
+        <div class="value-desc">Your Lekzio experience is personalized to you, not to an average learner. CEFR levels, correction modes, lesson topics, and review schedules all adapt based on your actual performance and preferences.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🌍</div>
+        <div class="value-title">Accessible to All</div>
+        <div class="value-desc">A meaningful Free plan, no paywalls on the core experience, and fair pricing for students and individuals. Language learning should not cost as much per month as a language class per hour.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEVELOPMENT STATUS -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-badge">STATUS</div>
+      <h2 class="section-title">Development Timeline</h2>
+      <p class="section-sub">We are building in public. Here is exactly where we are.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-dot done">✅</div>
+        <div class="tl-content">
+          <div class="tl-title">Phase 1 — Core AI Engine</div>
+          <div class="tl-sub">Claude AI integration, all 30+ feature prompts, SSE streaming, CEFR calibration, grammar rule engine. Fully complete.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-dot done">✅</div>
+        <div class="tl-content">
+          <div class="tl-title">Phase 2 — Database &amp; API</div>
+          <div class="tl-sub">FastAPI backend, SQLite schema, user auth, XP system, SM-2 spaced repetition, all REST endpoints. Fully complete.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-dot active">🔄</div>
+        <div class="tl-content">
+          <div class="tl-title">Phase 3 — Frontend App</div>
+          <div class="tl-sub">React UI for all 30+ features, real-time SSE chat, flashcard UI, skill radar analytics, shadowing mode, analytics dashboard. Fully complete and live.</div>
+          <div class="progress-bar-sm"><div class="progress-fill-sm" id="timelineProg" style="width:0"></div></div>
+        </div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-dot">⏳</div>
+        <div class="tl-content">
+          <div class="tl-title">Phase 4 — Beta Launch</div>
+          <div class="tl-sub">Launched March 2026. Now open to all users — sign up free and start learning today.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="reveal">
+      <h2>Join Us on This Journey</h2>
+      <p>Lekzio is built in public. Your feedback shapes the product. Sign up and be part of it from day one.</p>
+      <a href="register.html" class="btn-primary">Get Started →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <a href="index.html" class="footer-logo">🗣 Lekzio</a>
+        <p class="footer-copy">© 2026 Lekzio. All rights reserved.</p>
+        <span class="footer-dev" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);color:var(--green);">🟢 Live &amp; fully operational</span>
+        <div class="footer-social">
+          <a href="#" class="social-btn">🐦</a>
+          <a href="#" class="social-btn">🐙</a>
+          <a href="#" class="social-btn">💬</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <a href="index.html">Home</a>
+          <a href="features.html">Features</a>
+          
+          <a href="about.html">About</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="faq.html">FAQ</a>
+          <a href="contact.html">Contact</a>
+          <a href="login.html">Login</a>
+          <a href="register.html">Get Started</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">Lekzio is currently in development</div>
+  </div>
+</footer>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+  function toggleNav(){document.getElementById('navLinks').classList.toggle('open');}
+  window.addEventListener('scroll',()=>{
+    if(window.scrollY>50)document.getElementById('navbar').classList.add('scrolled');else document.getElementById('navbar').classList.remove('scrolled');
+    if(window.scrollY>400)document.getElementById('backTop').classList.add('visible');else document.getElementById('backTop').classList.remove('visible');
+  });
+  const obs=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  const progObs=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){document.getElementById('timelineProg').style.width='100%';progObs.unobserve(x.target);}});},{threshold:0.5});
+  const prog=document.getElementById('timelineProg');
+  if(prog)progObs.observe(prog.parentElement);
+</script>
+</body>
+</html>
